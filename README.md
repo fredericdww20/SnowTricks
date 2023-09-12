@@ -42,7 +42,7 @@ Afin de fluidifier votre avancement voici une proposition de manière de travail
 Étape 1 - Prenez connaissance entièrement de l’énoncé et des spécifications détaillées.
 Étape 2 - Produisez les diagrammes UML (modèle de données, classes, séquences, uses cases).
 Étape 3 - Créez le repository GitHub pour le projet.
-Étape 4 - Créez l’ensemble des issues sur le repository GitHub (https://github.com/username/nom_du_repo/issues/new).
+Étape 4 - Créez l’ensemble des issues sur le repository GitHub.
 Étape 5 - Faites les estimations de l’ensemble de vos issues.
 Étape 6 - Entamez le développement de l’application et proposez des pull requests pour chacune des fonctionnalités/issues.
 Étape 7 - Faites relire votre code à votre mentor (code proposé dans la ou les pull requests), et une fois validée(s), mergez la ou les pull requests dans la branche principale. (Cette relecture servira à valider votre implémentation des bonnes pratiques et la cohérence de votre code. La validation se fera en continu durant les sessions.)
