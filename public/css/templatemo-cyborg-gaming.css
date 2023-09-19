@@ -1733,3 +1733,49 @@ body {
     width: 16%;
   }
 }
+
+/*
+ CSS CUSTOM
+*/
+
+.imagecustom {
+  margin-top:150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagecustom img {
+  max-width: 40%; /* Ensure the image doesn't overflow the container */
+  border-radius: 15px;
+
+}
+.btn-custom {
+  font-size: 14px;
+  color: #fff;
+  background-color: #e75e8d;
+  padding: 12px 30px;
+  display: inline-block;
+  border-radius: 25px;
+  font-weight: 400;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-custom:hover {
+  font-size: 14px;
+  color: #e75e8d;
+  background-color: #ffffff;
+  padding: 12px 30px;
+  display: inline-block;
+  border-radius: 25px;
+  font-weight: 400;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+}
