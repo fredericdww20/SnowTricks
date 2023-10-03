@@ -76,5 +76,33 @@
     <script src="{{ asset('/js/tabs.js') }}"></script>
     <script src="{{ asset('/js/popup.js') }}"></script>
     <script src="{{ asset('/js/custom.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var $collectionHolder = $('ul.images'); // ou le sélecteur approprié pour votre liste d'images
+            var $addImageButton = $('.add_image_link');
+
+            $addImageButton.click(function(e) {
+                e.preventDefault();
+
+                // Récupère l'élément de données du prototype
+                var prototype = $collectionHolder.data('prototype');
+
+                // Récupère le nouvel index
+                var index = $collectionHolder.data('index');
+
+                // Remplace '__name__' dans le prototype HTML par un nombre basé sur l'index du widget
+                var newForm = prototype.replace(/__name__/g, index);
+
+                // Augmente l'index pour la prochaine fois
+                $collectionHolder.data('index', index + 1);
+
+                // Affiche le formulaire dans un li, avant le lien "ajouter une image"
+                var $newFormLi = $('<li></li>').append(newForm);
+                $addImageButton.before($newFormLi);
+            });
+        });
+    </script>
+
 </html>
 

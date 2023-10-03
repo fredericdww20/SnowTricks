@@ -22,6 +22,7 @@ class AddFigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $figure->setUser($this->getUser());
 
             foreach ($figure->getVideos() as $video) {
 
