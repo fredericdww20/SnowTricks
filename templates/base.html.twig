@@ -21,7 +21,8 @@
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
                         <a href="{{ path('app_index') }}" class="logo">
-                            <img src="./images/logo.png" alt="">
+{#                            <img src="./images/logo.png" alt="">#}
+                            <h1>SnowTricks</h1>
                         </a>
                         <!-- ***** Logo End ***** -->
                         {#                    <!-- ***** Search End ***** -->#}
@@ -37,6 +38,7 @@
                         <ul class="nav">
                             {% if app.user %}
                                 <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                                <li><a href="{{ path('app_add_figure') }}">Ajouter une figure</a></li>
                                 <li><a href="{{ path('app_profil') }}">Profil <img src="./images/profile-header.jpg" alt=""></a></li>
                             {% else %}
                                 <li><a href="{{ path('app_login') }}">Connexion</a></li>

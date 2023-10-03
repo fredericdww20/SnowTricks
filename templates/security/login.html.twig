@@ -5,10 +5,7 @@
 {% block body %}
     <div class="container">
         <div class="row">
-
-
-
-            <div class="mb-5 mt-5 mx-auto col-10 col-md-8 col-lg-6">
+            <div class="mb-4 mt-5 mx-auto col-10 col-md-8 col-lg-6">
                 <div class="imagecustom">
                     <img src="./images/logo_login.png" alt="Description of the image">
                 </div>
@@ -29,9 +26,11 @@
                     <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
                            class="form-control" autocomplete="email" required autofocus>
                     <label for="inputPassword" class="mt-2 text-white">Mot de passe</label>
-                    <input type="password" name="password" id="inputPassword" class="form-control"
+                    <input type="password" name="password" id="inputPassword" class="mb-3 form-control"
                            autocomplete="current-password" required>
-
+                    <a href="{{ path('app_forgot_password_request') }}"
+                       class="mt-5 text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Mot de
+                        passe oublié?</a>
                     <input type="hidden" name="_csrf_token"
                            value="{{ csrf_token('authenticate') }}"
                     >

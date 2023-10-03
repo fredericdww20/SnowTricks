@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une figure{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form.name) }}
+    {{ form_widget(form.chapo) }}
+    {{ form_widget(form.description) }}
+    {{ form_widget(form.categories) }}
+    {{ form_widget(form.videos.vars.prototype) }}
+    <h3>Vidéos</h3>
+    {% for videoForm in form.videos %}
+        <li>
+            {{ form_row(videoForm.videoLink) }} <!-- Change ici -->
+        </li>
+    {% endfor %}
+    <a href="#" class="add_video_link">Ajouter une vidéo</a>
+
+    <button type="submit">Enregistrer</button>
+    {{ form_end(form) }}
+
+    <script>
+        var $collectionHolder = $('ul.videos');
+        var $addVideoButton = $('<button type="button" class="add_video_link">Ajouter une vidéo</button>');
+        var $newLinkLi = $('<li></li>').append($addVideoButton);
+
+        $collectionHolder.append($newLinkLi);
+
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addVideoButton.on('click', function(e) {
+            addVideoForm($collectionHolder, $newLinkLi);
+        });
+
+        function addVideoForm($collectionHolder, $newLinkLi) {
+            const prototype = $collectionHolder.data('prototype');
+            const index = $collectionHolder.data('index');
+            const newForm = prototype.replace(/__name__/g, index);
+
+            $collectionHolder.data('index', index + 1);
+
+            const $newFormLi = $('<li></li>').append(newForm);
+            $newLinkLi.before($newFormLi);
+        }
+    </script>
+
+
+{% endblock %}
