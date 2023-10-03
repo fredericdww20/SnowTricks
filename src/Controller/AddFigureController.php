@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Figure;
 use App\Form\FigureFormType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddFigureController extends AbstractController
 {
+
     #[Route('/add/figure', name: 'app_add_figure')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -26,7 +28,7 @@ class AddFigureController extends AbstractController
             foreach ($images as $uploadedImage) {
                 $file = $uploadedImage->getFilename();
 
-                if ($file instanceof UploadedFile) { // Vérifiez si $file est une instance de UploadedFile
+                if ($file instanceof UploadedFile) {
                     $fileName = md5(uniqid()).'.'.$file->guessExtension();
                     try {
                         $file->move(
@@ -39,7 +41,7 @@ class AddFigureController extends AbstractController
                     }
                 }
             }
-
+            dump($this->getParameter('images_directory'));
             $figure->setUser($this->getUser());
 
             foreach ($figure->getVideos() as $video) {
