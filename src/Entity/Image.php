@@ -19,6 +19,7 @@ class Image
     #[ORM\ManyToOne(inversedBy: 'image')]
     private ?Figure $figure = null;
 
+
     public function getId(): ?int
     {
         return $this->id;

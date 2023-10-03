@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Figure;
 use App\Form\FigureFormType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddFigureController extends AbstractController
 {
+
     #[Route('/add/figure', name: 'app_add_figure')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -22,19 +24,35 @@ class AddFigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $images = $form['image']->getData();
+            foreach ($images as $uploadedImage) {
+                $file = $uploadedImage->getFilename();
+
+                if ($file instanceof UploadedFile) {
+                    $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                    try {
+                        $file->move(
+                            $this->getParameter('images_directory'),
+                            $fileName
+                        );
+                        $uploadedImage->setFilename($fileName);
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image.');
+                    }
+                }
+            }
+            dump($this->getParameter('images_directory'));
             $figure->setUser($this->getUser());
 
             foreach ($figure->getVideos() as $video) {
-
                 $video->setFigure($figure);
             }
+
             $figure->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($figure);
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre figure avec ses vidéos a bien été ajoutée !');
-
-            // Redirigez vers la page que vous souhaitez après l'ajout d'une figure
             return $this->redirectToRoute('app_add_figure');
         }
 
