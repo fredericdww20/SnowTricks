@@ -38,6 +38,15 @@
                     <input type="submit" value="Soumettre" />
                     {{ form_end(form) }}
 
+
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="flash-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
                 </div>
             </div>
         </div>

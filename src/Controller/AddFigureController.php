@@ -22,19 +22,35 @@ class AddFigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $images = $form['image']->getData();
+            foreach ($images as $uploadedImage) {
+                $file = $uploadedImage->getFilename();
+
+                if ($file instanceof UploadedFile) { // Vérifiez si $file est une instance de UploadedFile
+                    $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                    try {
+                        $file->move(
+                            $this->getParameter('images_directory'),
+                            $fileName
+                        );
+                        $uploadedImage->setFilename($fileName);
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image.');
+                    }
+                }
+            }
+
             $figure->setUser($this->getUser());
 
             foreach ($figure->getVideos() as $video) {
-
                 $video->setFigure($figure);
             }
+
             $figure->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($figure);
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre figure avec ses vidéos a bien été ajoutée !');
-
-            // Redirigez vers la page que vous souhaitez après l'ajout d'une figure
             return $this->redirectToRoute('app_add_figure');
         }
 

@@ -55,9 +55,10 @@
                       <img src="assets/images/popular-01.jpg" alt="">
                       <h4>{{ figure.name }}<br><span>{{ figure.chapo }}</span></h4>
                       <ul>
-                        <li><i class="fa fa-star"></i> 4.8</li>
+                        <li><i class="fa fa-star"></i> {{ figure.categories }}</li>
                         <li><i class="fa fa-download"></i> 2.3M</li>
-                      </ul>
+                      </ul></br>
+                      <button class="btn btn-secondary mt-3" href="">Voir</button>
                     </div>
                   </div>{% endfor %}
 
