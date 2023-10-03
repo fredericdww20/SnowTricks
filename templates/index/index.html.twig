@@ -47,17 +47,20 @@
                 <div class="heading-section">
                   <h4><em>Découvrez</em> les figures</h4>
                 </div>
-{#                <div class="row">#}
-{#                  <div class="col-lg-3 col-sm-6">#}
-{#                    <div class="item">#}
-{#                      <img src="assets/images/popular-01.jpg" alt="">#}
-{#                      <h4>Fortnite<br><span>Sandbox</span></h4>#}
-{#                      <ul>#}
-{#                        <li><i class="fa fa-star"></i> 4.8</li>#}
-{#                        <li><i class="fa fa-download"></i> 2.3M</li>#}
-{#                      </ul>#}
-{#                    </div>#}
-{#                  </div>#}
+
+                <div class="row">
+                  {% for figure in figures %}
+                  <div class="col-lg-3 col-sm-6">
+                    <div class="item">
+                      <img src="assets/images/popular-01.jpg" alt="">
+                      <h4>{{ figure.name }}<br><span>{{ figure.chapo }}</span></h4>
+                      <ul>
+                        <li><i class="fa fa-star"></i> 4.8</li>
+                        <li><i class="fa fa-download"></i> 2.3M</li>
+                      </ul>
+                    </div>
+                  </div>{% endfor %}
+
 {#                  <div class="col-lg-3 col-sm-6">#}
 {#                    <div class="item">#}
 {#                      <img src="assets/images/popular-02.jpg" alt="">#}
@@ -193,7 +196,26 @@
 {#      </div>#}
 {#    </div>#}
 {#  </div>#}
+{#      <ul>#}
+{#        {% for figure in figures %}#}
+{#          <li>#}
+{#            <strong>Nom de la figure :</strong> {{ figure.name }}#}
+{#            <br>#}
+{#            <strong>Description :</strong> {{ figure.description }}#}
+{#            <!-- Vous pouvez ajouter d'autres champs de la figure ici -->#}
 
+{#            <!-- Pour afficher les vidéos associées à chaque figure -->#}
+{#            {% for video in figure.videos %}#}
+{#              <video width="320" height="240" controls>#}
+{#                <source src="{{ video.videoLink }}" > <!-- Remplacez 'video/mp4' par le bon type MIME si nécessaire -->#}
+{#                Votre navigateur ne prend pas en charge la balise vidéo.#}
+{#              </video>#}
+{#            {% endfor %}#}
+{#          </li>#}
+{#        {% else %}#}
+{#          <li>Aucune figure trouvée pour cet utilisateur.</li>#}
+{#        {% endfor %}#}
+{#      </ul>#}
 
 
 

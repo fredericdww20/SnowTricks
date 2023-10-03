@@ -38,9 +38,16 @@ class Figure
     #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Video::class, cascade: ['persist'])]
     private Collection $videos;
 
+    #[ORM\ManyToOne(inversedBy: 'figures')]
+    private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Image::class)]
+    private Collection $image;
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
+        $this->image = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,5 +159,47 @@ class Figure
 
     public function __toString() {
         return $this->name;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImage(): Collection
+    {
+        return $this->image;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->image->contains($image)) {
+            $this->image->add($image);
+            $image->setFigure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->image->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getFigure() === $this) {
+                $image->setFigure(null);
+            }
+        }
+
+        return $this;
     }
 }

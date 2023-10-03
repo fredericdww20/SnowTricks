@@ -6,46 +6,30 @@
 
     {{ form_start(form) }}
 
-    {{ form_widget(form.name) }}
-    {{ form_widget(form.chapo) }}
-    {{ form_widget(form.description) }}
-    {{ form_widget(form.categories) }}
-    {{ form_widget(form.videos.vars.prototype) }}
-    <h3>Vidéos</h3>
-    {% for videoForm in form.videos %}
-        <li>
-            {{ form_row(videoForm.videoLink) }} <!-- Change ici -->
-        </li>
-    {% endfor %}
-    <a href="#" class="add_video_link">Ajouter une vidéo</a>
+    <!-- Autres champs de la figure... -->
 
-    <button type="submit">Enregistrer</button>
+    <h3>Vidéos</h3>
+    <ul class="videos">
+        {% if form.videos is defined and form.videos|length > 0 %}
+            <li>{{ form_row(form.videos[0].videoLink) }}</li>
+        {% endif %}
+    </ul>
+    <button type="button" class="btn btn-primary add_video_link">Ajouter une vidéo</button>
+
+    <br><br>
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    <h3>Images</h3>
+    <ul class="image" data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
+        {% for imageForm in form.image %}
+            <li>
+                {{ form_row(imageForm.filename) }}
+            </li>
+        {% endfor %}
+    </ul>
+    <button type="button" class="add_image_link">Ajouter une image</button>
     {{ form_end(form) }}
 
-    <script>
-        var $collectionHolder = $('ul.videos');
-        var $addVideoButton = $('<button type="button" class="add_video_link">Ajouter une vidéo</button>');
-        var $newLinkLi = $('<li></li>').append($addVideoButton);
 
-        $collectionHolder.append($newLinkLi);
-
-        $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-        $addVideoButton.on('click', function(e) {
-            addVideoForm($collectionHolder, $newLinkLi);
-        });
-
-        function addVideoForm($collectionHolder, $newLinkLi) {
-            const prototype = $collectionHolder.data('prototype');
-            const index = $collectionHolder.data('index');
-            const newForm = prototype.replace(/__name__/g, index);
-
-            $collectionHolder.data('index', index + 1);
-
-            const $newFormLi = $('<li></li>').append(newForm);
-            $newLinkLi.before($newFormLi);
-        }
-    </script>
 
 
 {% endblock %}
