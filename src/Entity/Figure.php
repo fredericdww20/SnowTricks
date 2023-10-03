@@ -41,7 +41,7 @@ class Figure
     #[ORM\ManyToOne(inversedBy: 'figures')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Image::class)]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Image::class, cascade: ['persist'])]
     private Collection $image;
 
     public function __construct()

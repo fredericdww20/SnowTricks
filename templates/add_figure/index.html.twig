@@ -4,30 +4,45 @@
 
 {% block body %}
 
-    {{ form_start(form) }}
+    <div class="most-popular">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="heading-section">
+                    <h4><em>Découvrez</em> les figures</h4>
+                </div>
 
-    <!-- Autres champs de la figure... -->
+                <div class="row">
+                    {{ form_start(form) }}
 
-    <h3>Vidéos</h3>
-    <ul class="videos">
-        {% if form.videos is defined and form.videos|length > 0 %}
-            <li>{{ form_row(form.videos[0].videoLink) }}</li>
-        {% endif %}
-    </ul>
-    <button type="button" class="btn btn-primary add_video_link">Ajouter une vidéo</button>
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.chapo) }}
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.categories) }}
 
-    <br><br>
-    <button type="submit" class="btn btn-success">Enregistrer</button>
-    <h3>Images</h3>
-    <ul class="image" data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
-        {% for imageForm in form.image %}
-            <li>
-                {{ form_row(imageForm.filename) }}
-            </li>
-        {% endfor %}
-    </ul>
-    <button type="button" class="add_image_link">Ajouter une image</button>
-    {{ form_end(form) }}
+                    <ul class="image"
+                        data-index="{{ form.image|length > 0 ? form.image|last.vars.name + 1 : 0 }}"
+                        data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}"
+                    ></ul>
+
+                    <button type="button" class="add_item_link" data-collection-holder-class="image">Ajouter une image</button>
+
+
+                    <ul class="tags"
+                        data-index="{{ form.videos|length > 0 ? form.video|last.vars.name + 1 : 0 }}"
+                        data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"
+                    ></ul>
+
+                    <button type="button" class="add_item_link" data-collection-holder-class="tags">Ajouter une vidéo</button>
+
+
+                    <input type="submit" value="Soumettre" />
+                    {{ form_end(form) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 
 
 
