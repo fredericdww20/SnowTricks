@@ -30,9 +30,15 @@ class AddFigureController extends AbstractController
 
                 if ($file instanceof UploadedFile) {
                     $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+                    $targetDirectory = $this->getParameter('images_directory');
+                    if (!file_exists($targetDirectory)) {
+                        mkdir($targetDirectory, 0777, true);
+                    }
+
                     try {
                         $file->move(
-                            $this->getParameter('images_directory'),
+                            $targetDirectory,
                             $fileName
                         );
                         $uploadedImage->setFilename($fileName);
@@ -41,7 +47,8 @@ class AddFigureController extends AbstractController
                     }
                 }
             }
-            dump($this->getParameter('images_directory'));
+
+
             $figure->setUser($this->getUser());
 
             foreach ($figure->getVideos() as $video) {
@@ -60,4 +67,5 @@ class AddFigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 }
