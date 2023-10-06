@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Figure;
 use App\Form\FigureFormType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,31 +24,20 @@ class AddFigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $images = $form['image']->getData();
             foreach ($images as $uploadedImage) {
-                $file = $uploadedImage->getFilename();
-
+                $file = $uploadedImage->getFile();
                 if ($file instanceof UploadedFile) {
-                    $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
-                    $targetDirectory = $this->getParameter('images_directory');
-                    if (!file_exists($targetDirectory)) {
-                        mkdir($targetDirectory, 0777, true);
-                    }
-
                     try {
-                        $file->move(
-                            $targetDirectory,
-                            $fileName
+                        $uploadedImage->move(
+                            $this->getParameter('images_directory'),
+                            $uploadedImage->getFilename()  // We use the filename that we set in the entity
                         );
-                        $uploadedImage->setFilename($fileName);
                     } catch (FileException $e) {
-                        $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image.');
+                        $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image: ' . $e->getMessage());
                     }
                 }
             }
-
 
             $figure->setUser($this->getUser());
 
@@ -61,6 +51,7 @@ class AddFigureController extends AbstractController
 
             $this->addFlash('success', 'Votre figure avec ses vidéos a bien été ajoutée !');
             return $this->redirectToRoute('app_add_figure');
+
         }
 
         return $this->render('add_figure/index.html.twig', [
