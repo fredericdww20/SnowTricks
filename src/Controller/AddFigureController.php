@@ -26,13 +26,14 @@ class AddFigureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $images = $form['image']->getData();
             foreach ($images as $uploadedImage) {
-                $file = $uploadedImage->getFile();
+                $file = $uploadedImage->getFilename();
                 if ($file instanceof UploadedFile) {
+                    $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+                    $uploadedImage->setFilename($fileName);
+
                     try {
-                        $uploadedImage->move(
-                            $this->getParameter('images_directory'),
-                            $uploadedImage->getFilename()  // We use the filename that we set in the entity
-                        );
+                        $file->move($this->getParameter('images_directory'), $fileName);
                     } catch (FileException $e) {
                         $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image: ' . $e->getMessage());
                     }
@@ -51,12 +52,12 @@ class AddFigureController extends AbstractController
 
             $this->addFlash('success', 'Votre figure avec ses vidéos a bien été ajoutée !');
             return $this->redirectToRoute('app_add_figure');
-
         }
 
         return $this->render('add_figure/index.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+
 
 }
