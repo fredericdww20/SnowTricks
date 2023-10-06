@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
@@ -18,6 +19,26 @@ class Image
 
     #[ORM\ManyToOne(inversedBy: 'image')]
     private ?Figure $figure = null;
+
+    private ?UploadedFile $file = null;
+
+
+    public function __construct() {
+        $this->file = null;
+
+    }
+    public function getFile(): ?UploadedFile {
+        return $this->file;
+    }
+
+    public function setFile(?UploadedFile $file): self {
+        $this->file = $file;
+        if($file) {
+            // It's a file upload, so we generate a unique filename
+            $this->filename = md5(uniqid()).'.'.$file->guessExtension();
+        }
+        return $this;
+    }
 
 
     public function getId(): ?int

@@ -16,6 +16,8 @@ class ImageFormType extends AbstractType
     {
         $builder
             ->add('filename', FileType::class, [
+                'label' => 'Image',
+                'mapped' => 'file',
 
             ])
             ->add('figure' , HiddenType::class, [
