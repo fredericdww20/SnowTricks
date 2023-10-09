@@ -28,4 +28,11 @@ class IndexController extends AbstractController
             'figures' => $figures
         ]);
     }
+    #[Route('/figure/{id}', name: 'figure_show')]
+    public function show(Figure $figure): Response
+    {
+        return $this->render('figure/show.html.twig', [
+            'figure' => $figure,
+        ]);
+    }
 }
