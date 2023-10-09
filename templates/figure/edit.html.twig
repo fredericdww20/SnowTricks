@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modifier la Figure</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Sauvegarder les modifications</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('figure_show', {'id': figure.id}) }}">Retour à la figure</a>
+{% endblock %}
