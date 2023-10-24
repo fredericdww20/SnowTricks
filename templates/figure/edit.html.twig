@@ -2,8 +2,7 @@
 
 {% block body %}
     <h1 class="mt-5">Modifier la Figure</h1>
-    {{ form_start(form) }}
-   {{ form_row(form.figure) }}
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
     <div class="images">
         {% for image in figure.image %}
         <img src="{{ asset('uploads/images/' ~ image.filename) }}" alt="{{ image.filename }}"></br></br>
