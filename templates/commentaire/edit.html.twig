@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un commentaire{% endblock %}
+
+{% block body %}
+    <h1>Modifier un commentaire</h1>
+
+    <form action="{{ path('figure_edit_comment', {'id': commentaire.id}) }}" method="post">
+        {{ form_start(form) }}
+        {{ form_row(form.content) }}
+        <div style="display: none">{{ form_row(form.figure) }}</div>
+        <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
+        {{ form_end(form) }}
+    </form>
+
+    <a href="{{ path('figure_show', {'id': commentaire.getFigure().id}) }}" class="btn btn-secondary">Retour à la figure</a>
+{% endblock %}

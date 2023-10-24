@@ -35,19 +35,25 @@ class Figure
     #[ORM\JoinColumn(nullable: false)]
     private ?Categories $categories = null;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Video::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Video::class, cascade: ['persist', 'remove'])]
     private Collection $videos;
 
     #[ORM\ManyToOne(inversedBy: 'figures')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Image::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Image::class, cascade: ['persist', 'remove'])]
     private Collection $image;
+
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Commentaire::class, cascade: ['persist', 'remove'])]
+    private Collection $commentaire;
+
 
     public function __construct()
     {
         $this->videos = new ArrayCollection();
         $this->image = new ArrayCollection();
+        $this->commentaire = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -202,4 +208,35 @@ class Figure
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getCommentaire(): Collection
+    {
+        return $this->commentaire;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaire->contains($commentaire)) {
+            $this->commentaire->add($commentaire);
+            $commentaire->setFigure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaire->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getFigure() === $this) {
+                $commentaire->setFigure(null);
+            }
+        }
+        return $this;
+    }
+
+
 }

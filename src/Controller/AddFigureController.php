@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Figure;
 use App\Form\FigureFormType;
+use App\Service\TrickManager;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +17,7 @@ class AddFigureController extends AbstractController
 {
 
     #[Route('/add/figure', name: 'app_add_figure')]
-    public function index(EntityManagerInterface $entityManager, Request $request): Response
+    public function index(TrickManager $manager, Request $request): Response
     {
         $figure = new Figure();
 
@@ -24,31 +25,8 @@ class AddFigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form['image']->getData();
-            foreach ($images as $uploadedImage) {
-                $file = $uploadedImage->getFilename();
-                if ($file instanceof UploadedFile) {
-                    $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-                    $uploadedImage->setFilename($fileName);
-
-                    try {
-                        $file->move($this->getParameter('images_directory'), $fileName);
-                    } catch (FileException $e) {
-                        $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image: ' . $e->getMessage());
-                    }
-                }
-            }
-
-            $figure->setUser($this->getUser());
-
-            foreach ($figure->getVideos() as $video) {
-                $video->setFigure($figure);
-            }
-
-            $figure->setCreatedAt(new \DateTimeImmutable());
-            $entityManager->persist($figure);
-            $entityManager->flush();
+            $manager->create($form->get('image'), $figure);
 
             $this->addFlash('success', 'Votre figure avec ses vidéos a bien été ajoutée !');
             return $this->redirectToRoute('app_add_figure');
@@ -58,6 +36,8 @@ class AddFigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
 
 
 }
