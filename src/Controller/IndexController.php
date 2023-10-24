@@ -6,6 +6,7 @@ use App\Entity\Commentaire;
 use App\Entity\Figure;
 use App\Form\CommentaireType;
 use App\Form\FigureFormType;
+use App\Service\TrickManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,8 @@ use Doctrine\ORM\EntityManagerInterface;
 class IndexController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
+    private $trickManager;
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -58,7 +61,7 @@ class IndexController extends AbstractController
     #[Route('/figure/{id}/delete', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Figure $figure, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $this->denyAccessUnlessGranted('CAN_DELETE', $figure);
+//        $this->denyAccessUnlessGranted('CAN_DELETE', $figure);
 
         if ($this->isCsrfTokenValid('delete' . $figure->getId(), $request->request->get('_token'))) {
             $entityManager->remove($figure);
@@ -69,17 +72,14 @@ class IndexController extends AbstractController
     }
 
     #[Route('/figure/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Figure $figure, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(TrickManager $manager,Request $request, Figure $figure): Response {
         $form = $this->createForm(FigureFormType::class, $figure);
-        {{dump($request->request->all());}}
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $figure->setUpdatedAt(new \DateTimeImmutable());
-            $entityManager->persist($figure);
-            $entityManager->flush();
+            $manager->updateImages($form->get('image'), $figure);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
         }
@@ -94,7 +94,6 @@ class IndexController extends AbstractController
     public function editcomment(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CommentaireType::class, $commentaire);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -46,4 +46,13 @@ class TrickManager
             $uploadedImage->move($this->parameterBag->get('images_directory'), $fileName);
         }
     }
+    public function updateImages(FormInterface $images, Figure $figure): void
+    {
+        foreach ($images as $upload) {
+            $this->uploadImage($upload);
+        }
+
+        $this->entityManager->persist($figure);
+        $this->entityManager->flush();
+    }
 }
