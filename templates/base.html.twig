@@ -39,7 +39,7 @@
                             {% if app.user %}
                                 <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
                                 <li><a href="{{ path('app_add_figure') }}">Ajouter une figure</a></li>
-                                <li><a href="{{ path('app_profil') }}">Profil <img src="./images/profile-header.jpg" alt=""></a></li>
+                                <li><a href="{{ path('app_profil') }}">Profil <img src="{{ asset('images/profile-header.jpg') }}" alt=""></a></li>
                             {% else %}
                                 <li><a href="{{ path('app_login') }}">Connexion</a></li>
                                 <li><a href="{{ path('app_register') }}">Inscription</a></li>
@@ -57,7 +57,9 @@
     </header>
 
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+
+        {% endblock %}
     </body>
 
     <footer>

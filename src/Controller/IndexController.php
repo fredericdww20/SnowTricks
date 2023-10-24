@@ -25,13 +25,13 @@ class IndexController extends AbstractController
     {
         $user = $this->getUser();
 
-        $figures = $this->entityManager->getRepository(Figure::class)->findBy(['user' => $user]);
+        $figures = $this->entityManager->getRepository(Figure::class)->findAll(['user' => $user]);
 
         return $this->render('index/index.html.twig', [
-            'controller_name' => 'IndexController',
             'figures' => $figures
         ]);
     }
+
     #[Route('/figure/{id}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(Figure $figure, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -42,7 +42,6 @@ class IndexController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $commentaire->setFigure($figure);
 
-            $commentaire->setCreatedAt(new \DateTimeImmutable());
             $commentaire->setAuthor($this->getUser());
             $entityManager->persist($commentaire);
             $entityManager->flush();
@@ -59,6 +58,7 @@ class IndexController extends AbstractController
     #[Route('/figure/{id}/delete', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Figure $figure, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('CAN_DELETE', $figure);
 
         if ($this->isCsrfTokenValid('delete' . $figure->getId(), $request->request->get('_token'))) {
             $entityManager->remove($figure);
@@ -72,6 +72,7 @@ class IndexController extends AbstractController
     public function edit(Request $request, Figure $figure, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(FigureFormType::class, $figure);
+        {{dump($request->request->all());}}
         $form->handleRequest($request);
 
 
@@ -88,10 +89,12 @@ class IndexController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route('/figure/{id}/editcomment', name: 'figure_edit_comment', methods: ['GET', 'POST'])]
     public function editcomment(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CommentaireType::class, $commentaire);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -106,6 +109,4 @@ class IndexController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-
 }

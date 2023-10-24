@@ -19,7 +19,7 @@ class VideoFormType extends AbstractType
             ->add('figure', HiddenType::class,)
             ->add('videoLink', TextType::class, [
                 'label' => 'Lien de la vidéo',
-                'required' => true,
+                'required' => false
             ]);
     }
 

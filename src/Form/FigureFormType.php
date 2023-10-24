@@ -29,7 +29,6 @@ class FigureFormType extends AbstractType
             'by_reference' => false,
                 'label' => false,
             ])
-
             ->add('videos', CollectionType::class, [
             'entry_type' => VideoFormType::class,
             'allow_add' => true,

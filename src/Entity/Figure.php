@@ -53,6 +53,7 @@ class Figure
         $this->videos = new ArrayCollection();
         $this->image = new ArrayCollection();
         $this->commentaire = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -236,5 +237,6 @@ class Figure
         }
         return $this;
     }
+
 
 }
