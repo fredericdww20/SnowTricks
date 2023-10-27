@@ -24,9 +24,9 @@ class FigureFormType extends AbstractType
             ])
             ->add('image', CollectionType::class, [
             'entry_type' => ImageFormType::class,
-            'allow_add' => true,
-            'allow_delete' => true,
-            'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
                 'label' => false,
             ])
             ->add('videos', CollectionType::class, [

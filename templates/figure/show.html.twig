@@ -3,6 +3,20 @@
 {% block title %}{{ figure.name }}{% endblock %}
 
 {% block body %}
+    {% if figure.image|length > 0 %}
+        {% for image in figure.image %}
+            <div class="image-container">
+                <img src="{{ asset('uploads/images/' ~ image.filename) }}" alt="{{ image.filename }}" class="full-width-image">
+                <div class="icon-overlay">
+                    <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('figure_delete', {'id': figure.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')"><i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <img src="{{ asset('images/placeholder.png') }}" alt="Image par défaut" class="full-width-image">
+    {% endif %}
+
 
     <div class="container">
         <div class="row">

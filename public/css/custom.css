@@ -1,0 +1,28 @@
+.image-container {
+    position: relative;
+    display: flex; /* This allows the container to shrink wrap its contents */
+    margin-top: 55px;
+}
+
+.icon-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.icon-overlay a {
+    margin: 0 5px;
+    color: white; /* Icon color, can be changed as needed */
+    text-decoration: none;
+    background-color: rgba(0,0,0,0.5); /* Semi-transparent black background */
+    padding: 5px;
+    border-radius: 50%; /* Makes the background circle-shaped */
+}
+
+.icon-overlay i {
+    font-size: 20px; /* Adjust size as needed */
+}
+.full-width-image {
+    width: 100%;
+    height: auto;
+}

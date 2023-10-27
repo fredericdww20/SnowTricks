@@ -61,14 +61,16 @@
                       <a href="{{ path('figure_show', {'id': figure.id}) }}"><h4>{{ figure.name }}<br><span></span></h4></a>
                       <ul>
                         {% if app.user == figure.user %}
-                        <li></i><form action="{{ path('figure_delete', {'id': figure.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
+                        <form action="{{ path('figure_delete', {'id': figure.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
-                            <input class="" type="submit" value="Supprimer">
+                            <button type="submit" class="">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
                           </form></li>
-                        <li class="mt-2"><form action="{{ path('figure_edit', {'id': figure.id}) }}" method="post">
-                            <input class="" type="submit" value="Modifier">
-                          </form>
-                        </li>
+                          <a href="{{ path('figure_delete', {'id': figure.id}) }}" method="post"
+                             onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
+                            <i class="fas fa-trash-alt"></i></a>
+                          <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
                         {% endif %}
                       </ul></br>
                       <a href="{{ path('figure_show', {'id': figure.id}) }}">Voir</a>
