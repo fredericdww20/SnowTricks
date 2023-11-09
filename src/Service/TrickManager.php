@@ -46,6 +46,10 @@ class TrickManager
             $uploadedImage->move($this->parameterBag->get('images_directory'), $fileName);
         }
     }
+
+    /*
+     * Mise a jour d'une image
+     */
     public function updateImages(FormInterface $images, Figure $figure): void
     {
         foreach ($images as $upload) {
@@ -53,6 +57,23 @@ class TrickManager
         }
 
         $this->entityManager->persist($figure);
+        $this->entityManager->flush();
+    }
+    /*
+     * Mise a jour d'une figure
+     */
+    public function update(FormInterface $images, Figure $figure): void {
+        $figure->setUpdatedAt(new \DateTimeImmutable());
+        $this->updateImages($images, $figure);
+        $this->entityManager->flush();
+    }
+
+    public function addComment(FormInterface $form, Figure $figure): void {
+        $commentaire = $form->getData();
+        $commentaire->setFigure($figure);
+        $commentaire->setAuthor($this->security->getUser());
+
+        $this->entityManager->persist($commentaire);
         $this->entityManager->flush();
     }
 }

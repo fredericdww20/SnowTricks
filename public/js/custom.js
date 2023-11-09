@@ -147,10 +147,6 @@
 		}
 	})
 
-	
-	
-	
-
 	// Menu Dropdown Toggle
 	if($('.menu-trigger').length){
 		$(".menu-trigger").on('click', function() {	
@@ -276,6 +272,78 @@
             });
         });
     }
-
 })(window.jQuery);
+let items = document.querySelectorAll('.carousel .carousel-item')
+
+items.forEach((el) => {
+	const minPerSlide = 4
+	let next = el.nextElementSibling
+	for (var i=1; i<minPerSlide; i++) {
+		if (!next) {
+			// wrap carousel by using first child
+			next = items[0]
+		}
+		let cloneChild = next.cloneNode(true)
+		el.appendChild(cloneChild.children[0])
+		next = next.nextElementSibling
+	}
+})
+
+// Quand l'utilisateur scroll vers le bas de 20px depuis le haut du document, on monte le bouton vers le haut
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+	if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 1000) {
+		document.getElementById("scrollToTopBtn").style.display = "block";
+	} else {
+		document.getElementById("scrollToTopBtn").style.display = "none";
+	}
+}
+
+// Quand l'utilisateur clique sur le bouton, scroll vers le haut
+function topFunction() {
+	document.body.scrollTop = 0; // Pour Safari
+	document.documentElement.scrollTop = 0;
+}
+
+document.getElementById("scrollToTopBtn").onclick = function() {topFunction()};
+
+
+// Permet de supprimer le message d'alerte dans 3 secondes
+window.setTimeout(function() {
+	$(".alert").fadeTo(500, 0).slideUp(500, function(){
+		$(this).remove();
+	});
+}, 3000);
+
+$(document).ready(function(){
+	$(".owl-carousel").owlCarousel({
+		margin: 10,
+		nav: true,
+		navText: ["<img src='/images/chevron-gauche.png'>","<img src='/images/chevron-droit.png'>"],
+		responsive:{
+			0:{
+				items:1
+			},
+			600:{
+				items:3
+			},
+			1000:{
+				items:4
+			}
+		}
+	});
+
+	$('[data-fancybox="gallery"]').fancybox({
+		// options pour fancybox
+	});
+});
+function toggleCarousel() {
+	var carousel = document.getElementById('carouselContent');
+	carousel.classList.toggle('d-none');
+}
+
+// Ajout d'un écouteur d'événement au bouton
+document.getElementById('toggleCarousel').addEventListener('click', toggleCarousel);
+
 

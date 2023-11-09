@@ -27,6 +27,7 @@ class ImageFormType extends AbstractType
             ->add('filename', FileType::class, [
                 'mapped' => false,
                 'required' => false,
+                
             ]);
 
         $transformer = new StringToFileTransformer($this->imageDirectory);

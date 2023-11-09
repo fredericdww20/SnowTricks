@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: FigureRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'Une figure avec ce nom existe déjà.')]
 class Figure
 {
     #[ORM\Id]
@@ -18,9 +20,6 @@ class Figure
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $chapo = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -69,18 +68,6 @@ class Figure
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getChapo(): ?string
-    {
-        return $this->chapo;
-    }
-
-    public function setChapo(string $chapo): static
-    {
-        $this->chapo = $chapo;
 
         return $this;
     }
@@ -237,6 +224,4 @@ class Figure
         }
         return $this;
     }
-
-
 }

@@ -4,102 +4,162 @@
 
 {% block body %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-content">
-                    <div class="game-details">
-                        <div class="row">
-                            <div class="mt-0 col-lg-12">
-                                <h2>{{ figure.name }}</h2>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="content">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <p>{{ figure.chapo }}</p>
-                                            <p>{{ figure.description }}</p>
-                                            <p>{{ figure.categories }}</p>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            {% for video in figure.videos %}
-                                                <iframe width="500" height="315" src="https://www.youtube.com/embed/{{ video.videoLink }}" frameborder="0" allowfullscreen></iframe>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="col-lg-12">
-                                            {% for image in figure.image %}
-                                                <img src="{{ asset('uploads/images/' ~ image.filename) }}" alt="{{ image.filename }}">
-                                            {% else %}
-                                                <img src="{{ asset('images/placeholder.png') }}" alt="Image par défaut">
-                                            {% endfor %}
-                                        </div>
-                                        <div class="mt-5 col-lg-6">
-                                            {% if app.user == figure.user %}
-                                                <div class="row">
-                                                    <div class="col-lg-3">
-                                                        <form action="{{ path('figure_edit', {'id': figure.id}) }}" method="post">
-                                                            <input class="custom-button" type="submit" value="Modifier">
-                                                        </form>
-                                                    </div>
-                                                    <div class="col-lg-3">
-                                                        <form action="{{ path('figure_delete', {'id': figure.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
-                                                            <input class="custom-button" type="submit" value="Supprimer">
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-lg-2 main-border-button">
+    {% if figure.image|length > 0 %}
+        <div class="image-container-home">
+            {% set image = figure.image|first %}
+            <img src="{{ asset('uploads/images/' ~ image.filename) }}" alt="{{ image.filename }}"
+                 class="full-width-image">
+            <div class="icon-overlay">
+                {% if is_granted('FIGURE_EDIT', figure) %}
+                    <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
+                {% endif %}
+                {% if is_granted('FIGURE_DELETE', figure) %}
+                    <a href="{{ path('figure_delete', {'id': figure.id}) }}"
+                       onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')"><i
+                                class="fas fa-trash-alt"></i></a>
+                {% endif %}
+            </div>
+            <div class="title-overlay">{{ figure.name }}</div>
+        </div>
+    {% else %}
 
+        <div class="image-container">
+            <img src="{{ asset('images/placeholder.png') }}" alt="Image par défaut" class="full-width-image">
+            <div class="icon-overlay">
+                {% if is_granted('FIGURE_EDIT', figure) %}
+                    <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
+                {% endif %}
+                {% if is_granted('FIGURE_DELETE', figure) %}
+                    <a href="{{ path('figure_delete', {'id': figure.id}) }}"
+                       onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')"><i
+                                class="fas fa-trash-alt"></i></a>
+                {% endif %}
+            </div>
+            <div class="title-overlay">{{ figure.name }}</div>
+        </div>
+    {% endif %}
+
+    <div class="owl-carousel mt-5 d-none" id="carouselContent">
+
+    {% for image in figure.image %}
+            {% if loop.index > 1 %}
+                <div class="item">
+                    <a href="{{ asset('uploads/images/' ~ image.filename) }}" data-fancybox="gallery">
+                        <img src="{{ asset('uploads/images/' ~ image.filename) }}" alt="{{ image.filename }}"
+                             class="img-fluid">
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for video in figure.videos %}
+            <div class="item">
+                <a href="{{ video.videoLink }}" data-fancybox="gallery">
+                    <iframe src="{{ video.videoLink }}" frameborder="0" width="560" height="300"
+                            allowfullscreen></iframe>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-5 d-flex justify-content-center">
+        <button id="toggleCarousel" class="btn btn-primary mb-3">Afficher/Masquer le Carrousel</button>
+    </div>
+
+    <div class="container mt-3 ">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="content">
+                            <div class="row">
+                                <div class="col-lg-12 mt-3 ">
+                                    <p class="text-white">{{ figure.description|nl2br }}</p>
+                                </div>
+
+                                <div class="mt-3 container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-auto">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-check"
+                                                   style="color: #ffffff; margin-right: 10px"></i>
+                                                <p class="mb-0">{{ figure.categories }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-regular fa-clock"
+                                                   style="color: #ffffff; margin-right: 10px"></i>
+                                                <p class="mb-0">{{ figure.createdAt|date('Y-m-d H:i:s') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="d-flex align-items-center mb-2">
+                                                {% if figure.updatedAt and figure.updatedAt != figure.createdAt %}
+                                                    <i class="fa-solid fa-calendar-check"
+                                                       style="color: #ffffff; margin-right: 10px"></i>
+                                                    <p>Modifié le : {{ figure.updatedAt|date('Y-m-d H:i:s') }}</p>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="other-games">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h2>Ajouter un commentaire</h2>
-                                {% if app.user %}
-                                    {{ form_start(commentaireForm) }}
+                <div class="other-games mb-5">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2>Ajouter un commentaire</h2>
+                            {% if app.user %}
+                                {{ form_start(commentaireForm) }}
 
-                                    {{ form_row(commentaireForm.content) }}
-                                    <div style="display: none">{{ form_row(commentaireForm.figure) }}</div>
-                                    <button class="mt-3 mb-5 custom-button" type="submit">Ajouter</button>
-                                    {{ form_end(commentaireForm) }}
-                                {% else %}
-                                    <p class="mb-3">Vous devez être connecté pour ajouter un commentaire. <a href="{{ path('app_login') }}">Se connecter</a></p>
-                                {% endif %}
-                            </div>
-                            <div class="heading-section">
-                                <h4><em></em>Commentaire</h4>
-                            </div>
-                            {% for commentaire in figure.commentaire %}
+                                {{ form_row(commentaireForm.content) }}
+                                <div style="display: none">{{ form_row(commentaireForm.figure) }}</div>
+                                <button class="mt-3 mb-5 custom-button" type="submit">Ajouter</button>
+                                {{ form_end(commentaireForm) }}
+                            {% else %}
+                                <p class="mb-3">Vous devez être connecté pour ajouter un commentaire. <a
+                                            href="{{ path('app_login') }}">Se connecter</a></p>
+                            {% endif %}
+                        </div>
+
+                        <div class="heading-section">
+                            <h4><em></em>Commentaire</h4>
+                        </div>
+
+                        {% for commentaire in figure.commentaire %}
                             <div class="col-lg-4">
                                 <div class="item">
 
-                                    <img src="assets/images/game-01.jpg" alt="" class="fa fa-startemplatemo-item">
+                                    <img src="" alt="" class="fa fa-startemplatemo-item">
                                     <h4>Posté le {{ commentaire.createdAt|date('d/m/Y à H:i') }}</h4>
                                     <p> Par {{ commentaire.author.username }}</p>
                                     <p class="mt-3 mb-2">{{ commentaire.content }}</p>
-                                    {% if app.user and app.user.id == commentaire.author.id %}
-                                    <div class="main-border-button">
-                                        <a href="{{ path('figure_edit_comment', {'id': commentaire.id}) }}">Modifier</a>
-                                        <a href="{{ path('figure_edit_comment', {'id': commentaire.id}) }}">Supprimer</a>
-                                    </div>
+                                    {% if is_granted('COMMENT_EDIT', commentaire) %}
+                                        <div class="main-border-button">
+                                            <a href="{{ path('figure_edit_comment', {'id': commentaire.id}) }}">Modifier</a>
+                                            <a href="{{ path('figure_edit_comment', {'id': commentaire.id}) }}">Supprimer</a>
+                                        </div>
                                     {% endif %}
                                 </div>
                             </div>
-                            {% endfor %}
-                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 {% endblock %}

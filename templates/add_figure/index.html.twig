@@ -15,7 +15,6 @@
                     {{ form_start(form) }}
 
                     {{ form_row(form.name) }}
-                    {{ form_row(form.chapo) }}
                     {{ form_row(form.description) }}
                     {{ form_row(form.categories) }}
 
@@ -24,18 +23,18 @@
                         data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}"
                     ></ul>
 
-                    <button type="button" class="add_item_link" data-collection-holder-class="image">Ajouter une image</button>
-
-
+                    <button type="button" class="add_item_link" data-collection-holder-class="image">Ajouter une image
+                    </button>
                     <ul class="tags"
                         data-index="{{ form.videos|length > 0 ? form.video|last.vars.name + 1 : 0 }}"
                         data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"
                     ></ul>
 
-                    <button type="button" class="add_item_link" data-collection-holder-class="tags">Ajouter une vidéo</button>
+                    <button type="button" class="add_item_link" data-collection-holder-class="tags">Ajouter une vidéo
+                    </button>
 
 
-                    <input type="submit" value="Soumettre" />
+                    <input type="submit" value="Soumettre"/>
                     {{ form_end(form) }}
 
 
@@ -52,8 +51,5 @@
         </div>
     </div>
     </div>
-
-
-
 
 {% endblock %}
