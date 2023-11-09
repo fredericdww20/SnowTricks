@@ -1,0 +1,34 @@
+@media only screen and (max-width: 600px) {
+    .image-container {
+        position: relative;
+        display: flex;
+        margin-top: 70px;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 35px;
+    }
+    .image-container-home {
+        position: relative;
+        display: flex;
+        margin-top: 80px;
+        justify-content: center;
+        align-items: center;
+    }
+    .title-home, header-text, h6 {
+        color: #1e1e1e;
+    }
+}
+@media (min-width: 992px) { /* ou une autre taille correspondant à votre point de rupture pour les ordinateurs */
+    .owl-carousel {
+        display: block !important; /* ou la classe par défaut qui affiche le carrousel */
+    }
+}
+@media (min-width: 768px) {
+    #toggleCarousel {
+        display: none;
+    }
+}

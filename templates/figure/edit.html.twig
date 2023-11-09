@@ -1,63 +1,128 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Modifier une figure{% endblock %}
+
 {% block body %}
-    <h1 class="mt-5">Modifier la Figure</h1>
-    {{ form_start(form) }}
-
-
-
-    <ul id="image-fields-list" data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
-        {% for imageField in form.image %}
-            <li>
-                {% if imageField.vars.data and imageField.vars.data.filename %}
-                    <img src="{{ asset('uploads/images/' ~ imageField.vars.data.filename) }}" alt="{{ imageField.vars.data.filename }}">
-                    <span>Nom du fichier : {{ imageField.vars.data.filename }}</span>
-                {% endif %}
-                {{ form_row(imageField.filename) }}
-                <button class="delete-image" data-figure-id="{{ figure.id }}" data-image-id="{{ imageField.vars.data.id }}">Supprimer</button>
-            </li>
+    <div class="container">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show"
+                     role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
         {% endfor %}
-    </ul>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-content">
+                    <div class="game-details">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            {{ form_start(form) }}
+                                            {{ form_row(form.name, {
+                                                'attr': {'class': 'form-control'},
+                                                'label': 'Nom de la figure'
+                                            }) }}
 
-    <button type="button" id="add-image">Ajouter une image</button>
+                                            {{ form_row(form.description, {
+                                                'attr': {'class': 'form-control'},
+                                                'label': 'Description'
+                                            }) }}
 
-    <button type="submit">Sauvegarder les modifications</button>
-    {{ form_end(form) }}
+                                            {{ form_row(form.categories, {
+                                                'attr': {'class': 'form-control'},
+                                                'label': 'Catégories'
+                                            }) }}
 
-     <a href="{{ path('figure_show', {'id': figure.id}) }}">Retour à la figure</a>
+                                            <ul id="image-fields-list"
+                                                data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
+                                                {% for imageField in form.image %}
+                                                    <li>
+                                                        {% if imageField.vars.data and imageField.vars.data.filename %}
+                                                            <img src="{{ asset('uploads/images/' ~ imageField.vars.data.filename) }}"
+                                                                 alt="{{ imageField.vars.data.filename }}">
+                                                            <span>Nom du fichier : {{ imageField.vars.data.filename }}</span>
+                                                        {% endif %}
+                                                        {{ form_row(imageField.filename) }}
+                                                        <button class="delete-image" data-figure-id="{{ figure.id }}"
+                                                                data-image-id="{{ imageField.vars.data.id }}">Supprimer
+                                                        </button>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                            <ul id="video-fields-list"
+                                                data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                                {% for videoField in form.videos %}
+                                                    <li>
+                                                        {{ form_row(videoField.videoLink) }}
+                                                        <button type="button" class="delete-video"
+                                                                data-video-id="{{ videoField.vars.data.id }}">Supprimer
+                                                        </button>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                            <button type="button" id="add-video">Ajouter une vidéo</button>
+                                            <button type="button" id="add-image">Ajouter une image</button>
+                                        </div>
+                                        <button type="submit" class="mt-3 btn btn-primary">Enregistrer</button>
+                                        {{ form_end(form) }}
+                                        <a href="{{ path('figure_show', {'id': figure.id}) }}">Retour à la figure</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const imageFieldsList = document.getElementById('image-fields-list');
-                const addImageButton = document.getElementById('add-image');
-                const deleteImageButtons = document.querySelectorAll('.delete-image');
-
-                addImageButton.addEventListener('click', function() {
-                    const prototype = imageFieldsList.dataset.prototype;
-                    const index = imageFieldsList.children.length;
-                    const newForm = prototype.replace(/__name__/g, index);
-
-                    imageFieldsList.insertAdjacentHTML('beforeend', newForm);
-                });
-
-                deleteImageButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        const imageField = button.closest('li');
-                        imageField.remove();
-                    });
-                });
-            });
-
-    document.addEventListener('DOMContentLoaded', function() {
+    <script>
+        // Add + delete image
+        document.addEventListener('DOMContentLoaded', function () {
             const imageFieldsList = document.getElementById('image-fields-list');
             const addImageButton = document.getElementById('add-image');
+            const deleteImageButtons = document.querySelectorAll('.delete-image');
 
-            addImageButton.addEventListener('click', function() {
+            addImageButton.addEventListener('click', function () {
                 const prototype = imageFieldsList.dataset.prototype;
                 const index = imageFieldsList.children.length;
                 const newForm = prototype.replace(/__name__/g, index);
 
                 imageFieldsList.insertAdjacentHTML('beforeend', newForm);
+            });
+
+            deleteImageButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const imageField = button.closest('li');
+                    imageField.remove();
+                });
+            });
+        });
+        // Add + delete video
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const videoFieldsList = document.getElementById('video-fields-list');
+            const addVideoButton = document.getElementById('add-video');
+            const newVideoIndex = videoFieldsList.children.length;
+
+            addVideoButton.addEventListener('click', function () {
+                const prototype = videoFieldsList.dataset.prototype;
+                const newForm = prototype.replace(/__name__/g, newVideoIndex);
+                videoFieldsList.insertAdjacentHTML('beforeend', newForm);
+                videoFieldsList.children[newVideoIndex].querySelector('.delete-video').addEventListener('click', function () {
+                    this.closest('li').remove();
+                });
+            });
+
+            document.querySelectorAll('.delete-video').forEach(button => {
+                button.addEventListener('click', function () {
+                    this.closest('li').remove();
+                });
             });
         });
     </script>

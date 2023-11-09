@@ -3,85 +3,115 @@
 {% block title %}SnowTricks{% endblock %}
 
 {% block body %}
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
 
-{#  <!-- ***** Preloader Start ***** -->#}
-{#  <div id="js-preloader" class="js-preloader">#}
-{#    <div class="preloader-inner">#}
-{#      <span class="dot"></span>#}
-{#      <div class="dots">#}
-{#        <span></span>#}
-{#        <span></span>#}
-{#        <span></span>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#  <!-- ***** Preloader End ***** -->#}
+  <div class="image-container-home">
+    <img src="{{ asset('/images/snowboarder_banner.webp') }}" alt="Snowboarder">
+    <div class="title-home">
+      <div class="header-text">
+        <h6>Bienvenue sur</h6>
+        <h4><em class="text-pink">SnowTricks</em> un site communautaire</h4>
+      </div>
+    </div>
+    <!-- Flèche de redirection vers les figures -->
+    <a href="#figures-section" class="arrow-link animated-arrow">
+      <img src="{{ asset('/images/arrow_down.png') }}" alt="Flèche vers les figures">
+    </a>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="page-content">
+  </div>
 
-          <!-- ***** Banner Start ***** -->
-          <div class="main-banner">
-            <div class="row">
-              <div class="col-lg-7">
-                <div class="header-text">
-                  <h6>Bienvenue sur</h6>
-                  <h4><em>SnowTricks</em> un site communautaire</h4>
-                  <div class="main-button">
-                    <a href="browse.html">Voir les figure</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- ***** Banner End ***** -->
-
-          <!-- ***** Most Popular Start ***** -->
-          <div class="most-popular">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="heading-section">
-                  <h4><em>Découvrez</em> les figures</h4>
-                </div>
-
-                <div class="row">
-                  {% for figure in figures %}
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <div class="figure-images">
-                        {% set first_image = figure.image|first %}
-                        {% if first_image %}
-                        <img src="{{ asset('uploads/images/' ~ first_image.filename) }}" alt="{{ first_image.filename }}">
-                        {% else %}
-                          <img src="{{ asset('images/placeholder.png') }}" alt="Image par défaut">
-                        {% endif %}
-                      </div>
-                      <a href="{{ path('figure_show', {'id': figure.id}) }}"><h4>{{ figure.name }}<br><span></span></h4></a>
-                      <ul>
-                        {% if app.user == figure.user %}
-                        <form action="{{ path('figure_delete', {'id': figure.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
-                            <button type="submit" class="">
-                              <i class="fas fa-trash-alt"></i>
-                            </button>
-                          </form></li>
-                          <a href="{{ path('figure_delete', {'id': figure.id}) }}" method="post"
-                             onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
-                            <i class="fas fa-trash-alt"></i></a>
-                          <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
-                        {% endif %}
-                      </ul></br>
-                      <a href="{{ path('figure_show', {'id': figure.id}) }}">Voir</a>
+  <div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="page-content">
+        <div class="most-popular">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="heading-section">
+                <h4><em>Découvrez</em> les figures</h4>
+                {% for label, messages in app.flashes %}
+                  {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                      {{ message }}
                     </div>
-                  </div>{% endfor %}
-                  </div>
-                </div>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+
+              <div class="row">
+                {% if figures|length > 0 %}
+                  {% for figure in figures %}
+                    <div id="figures-section" class="col-lg-3 col-sm-6">
+                      <div class="item">
+                        <div class="figure-images">
+                          {% set first_image = figure.image|first %}
+                          {% if first_image %}
+                            <img src="{{ asset('uploads/images/' ~ first_image.filename) }}" alt="{{ first_image.filename }}">
+                          {% else %}
+                            <img src="{{ asset('images/placeholder.png') }}" alt="Image par défaut">
+                          {% endif %}
+                        </div>
+                        <a href="{{ path('figure_show', {'id': figure.id}) }}"><h4>{{ figure.name }}<br><span></span></h4></a></br>
+                        <p>{{ figure.categories }}</p>
+                        <ul>
+                          {% if is_granted('FIGURE_DELETE', figure) %}
+                            <form action="{{ path('figure_delete', {'id': figure.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
+                              <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
+                              <button type="submit" class="">
+                                <i class="fas fa-trash-alt"></i>
+                              </button>
+                              {% endif %}
+                          {% if is_granted('FIGURE_EDIT', figure) %}
+                            <button type="submit" class="">
+                            <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
+                            </button>
+                          {% endif %}
+                        </ul></br>
+                        <a href="{{ path('figure_show', {'id': figure.id}) }}">Voir</a>
+                      </div>
+                    </div>
+                  {% endfor %}
+
+                  {% if totalPages > 0 %}
+                    <nav>
+                      <ul class="pagination">
+                        {# Lien vers la page précédente #}
+                        <li class="page-item{% if currentPage == 1 %} disabled{% endif %}">
+                          <a class="page-link" href="{{ path('app_index', {'page': currentPage - 1}) }}">Précédent</a>
+                        </li>
+
+                        {# Affichage des numéros de page #}
+                        {% for i in 1..totalPages %}
+                          <li class="page-item{% if i == currentPage %} active{% endif %}">
+                            <a class="page-link" href="{{ path('app_index', {'page': i}) }}">{{ i }}</a>
+                          </li>
+                        {% endfor %}
+
+                        {# Lien vers la page suivante #}
+                        <li class="page-item{% if currentPage == totalPages %} disabled{% endif %}">
+                          <a class="page-link" href="{{ path('app_index', {'page': currentPage + 1}) }}">Suivant</a>
+                        </li>
+                      </ul>
+                    </nav>
+                  {% endif %}
+                {% else %}
+                  <p>Aucune figure à afficher.</p>
+                {% endif %}
               </div>
             </div>
           </div>
-
-</html>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}
