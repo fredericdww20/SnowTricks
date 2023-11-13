@@ -3,16 +3,16 @@
 {% block title %}SnowTricks{% endblock %}
 
 {% block body %}
-  <div id="js-preloader" class="js-preloader">
-    <div class="preloader-inner">
-      <span class="dot"></span>
-      <div class="dots">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-  </div>
+{#  <div id="js-preloader" class="js-preloader">#}
+{#    <div class="preloader-inner">#}
+{#      <span class="dot"></span>#}
+{#      <div class="dots">#}
+{#        <span></span>#}
+{#        <span></span>#}
+{#        <span></span>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
 
   <div class="image-container-home">
     <img src="{{ asset('/images/snowboarder_banner.webp') }}" alt="Snowboarder">
@@ -47,11 +47,23 @@
                 {% endfor %}
               </div>
 
-              <div class="row">
+                <div id="category-filters">
+                    <button class="filter-btn" data-category="all">Tous</button>
+                    {% for category in categories %}
+                        <button class="filter-btn" data-category="{{ category.name }}">{{ category.name }}</button>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-3" id="no-figures-message" style="display: none;">
+                    <p>Aucune figure ne correspond à cette catégorie.</p>
+                </div>
+
+
+                <div class="row mt-4" id="figures-section">
                 {% if figures|length > 0 %}
                   {% for figure in figures %}
-                    <div id="figures-section" class="col-lg-3 col-sm-6">
-                      <div class="item">
+                    <div class="col-lg-3 col-sm-6 figure-item" data-category="{{ figure.categories.name }}">
+                    <div class="item">
                         <div class="figure-images">
                           {% set first_image = figure.image|first %}
                           {% if first_image %}
@@ -63,19 +75,15 @@
                         <a href="{{ path('figure_show', {'id': figure.id}) }}"><h4>{{ figure.name }}<br><span></span></h4></a></br>
                         <p>{{ figure.categories }}</p>
                         <ul>
-                          {% if is_granted('FIGURE_DELETE', figure) %}
-                            <form action="{{ path('figure_delete', {'id': figure.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
-                              <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
-                              <button type="submit" class="">
-                                <i class="fas fa-trash-alt"></i>
-                              </button>
-                              {% endif %}
-                          {% if is_granted('FIGURE_EDIT', figure) %}
-                            <button type="submit" class="">
-                            <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
-                            </button>
-                          {% endif %}
-                        </ul></br>
+                            {% if is_granted('FIGURE_EDIT', figure) %}
+                                <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
+                            {% endif %}
+                            {% if is_granted('FIGURE_DELETE', figure) %}
+                                <a href="{{ path('figure_delete', {'id': figure.id}) }}"
+                                   onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')"><i
+                                            class="fas fa-trash-alt"></i></a>
+                            {% endif %}
+                        </ul>
                         <a href="{{ path('figure_show', {'id': figure.id}) }}">Voir</a>
                       </div>
                     </div>
@@ -113,5 +121,6 @@
       </div>
     </div>
   </div>
+
 
 {% endblock %}

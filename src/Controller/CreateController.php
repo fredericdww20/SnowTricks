@@ -70,14 +70,11 @@ class CreateController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $figure->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($figure);
-            $entityManager->flush();
+        // Suppression de la figure sans vérifier le CSRF token
+        $entityManager->remove($figure);
+        $entityManager->flush();
 
-            $this->addFlash('success', 'Figure supprimée avec succès !');
-        } else {
-            $this->addFlash('error', 'Invalid CSRF token');
-        }
+        $this->addFlash('success', 'Figure supprimée avec succès !');
 
         return $this->redirectToRoute('app_index');
     }

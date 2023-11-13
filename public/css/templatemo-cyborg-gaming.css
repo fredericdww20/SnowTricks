@@ -822,7 +822,6 @@ Most Popular Style
 
 .most-popular .item ul {
   float: right;
-  margin-top: 20px;
 }
 
 .most-popular .item ul li {
@@ -1619,8 +1618,8 @@ body {
 
 @media (max-width: 767px) {
   body .page-content {
-    padding: 0px 30px;
-    padding-bottom: 1px;
+    padding-top: 45px;
+    padding-bottom: 45px;
   }
   .main-banner {
     text-align: center;
