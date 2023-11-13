@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .image-container-home {
     position: relative;
     display: flex;
@@ -14,7 +15,7 @@
 }
 
 #image-fields-list {
-    margin-top: 115px;
+    margin-top: 45px;
 }
 
 .fas fa-edit {
@@ -40,6 +41,7 @@
 .icon-overlay i {
     font-size: 20px;
 }
+
 .title-overlay {
     position: absolute;
     width: auto;
@@ -99,9 +101,8 @@
 
 .active .page-link, .page-link.active {
     z-index: 3;
-    color: var(--bs-pagination-active-color);
-    background-color: rgb(236, 96, 144)!important;
-    border-color: rgb(236, 96, 144)!important;
+    background-color: rgb(236, 96, 144) !important;
+    border-color: rgb(236, 96, 144) !important;
 }
 
 .owl-prev, .owl-next {
@@ -119,7 +120,7 @@
 }
 
 .owl-prev img, .owl-next img {
-    width: 50px;  /* ou la taille que vous souhaitez */
+    width: 50px; /* ou la taille que vous souhaitez */
     height: auto; /* pour conserver le ratio de l'image */
 }
 
@@ -127,7 +128,7 @@
     background: 0 0;
     color: inherit;
     border: none;
-    padding: 0!important;
+    padding: 0 !important;
     font: inherit;
     margin-right: 25px;
 }
@@ -136,7 +137,7 @@
     background: 0 0;
     color: inherit;
     border: none;
-    padding: 0!important;
+    padding: 0 !important;
     font: inherit;
     margin-left: 25px;
 }
@@ -145,21 +146,41 @@
     --bs-nav-link-padding-x: 1rem;
     --bs-nav-link-padding-y: 0.5rem;
     --bs-nav-link-font-weight: ;
-    --bs-nav-link-color: var(--bs-link-color);
-    --bs-nav-link-hover-color: var(--bs-link-hover-color);
-    --bs-nav-link-disabled-color: var(--bs-secondary-color);
     display: flex;
     flex-wrap: wrap;
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
-    margin-top: 10px!important;
+    margin-top: 10px !important;
 }
 
 #toggleCarousel {
-    border-color: rgb(236, 96, 144)!important;
-    background-color: rgb(236, 96, 144)!important;
+    border-color: rgb(236, 96, 144) !important;
+    background-color: rgb(236, 96, 144) !important;
 }
+
+.filter-btn {
+    line-height: 24px;
+    vertical-align: baseline;
+    letter-spacing: normal;
+    word-spacing: 0px;
+    padding: 8px;
+    color: rgb(33, 37, 41);
+    border-radius: 5px;
+    font-family: Poppins, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-decoration: none solid rgb(33, 37, 41);
+    text-align: left;
+    text-indent: 0px;
+}
+
+.customcontainerfigure {
+    margin-top: 200px;
+}
+
 
 
 
