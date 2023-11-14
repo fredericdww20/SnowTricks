@@ -1,4 +1,4 @@
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 900px) {
     .image-container {
         position: relative;
         display: flex;
@@ -7,9 +7,12 @@
     h1, h2, h3, h4, h5, h6 {
         margin-top: 0px;
         margin-bottom: 0px;
-        color: #fff;
+        color: #ffffff;
         font-weight: 700;
         font-size: 35px;
+    }
+    .logo h1 {
+        color: black;
     }
     .image-container-home {
         position: relative;
@@ -21,13 +24,19 @@
     .title-home, header-text, h6 {
         color: #1e1e1e;
     }
+    .returnbnt {
+        text-align: center;
+        margin-top: 5px;
+    }
+
+
 }
 @media (min-width: 992px) { /* ou une autre taille correspondant à votre point de rupture pour les ordinateurs */
     .owl-carousel {
         display: block !important; /* ou la classe par défaut qui affiche le carrousel */
     }
 }
-@media (min-width: 768px) {
+@media (min-width: 795px) {
     #toggleCarousel {
         display: none;
     }

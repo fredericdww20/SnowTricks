@@ -27,6 +27,10 @@ class ImageFormType extends AbstractType
             ->add('filename', FileType::class, [
                 'mapped' => false,
                 'required' => false,
+                'label' => 'Ajouter une image',
+                'attr' => [
+                    'class' => 'form-control mt-2',
+                ]
                 
             ]);
 

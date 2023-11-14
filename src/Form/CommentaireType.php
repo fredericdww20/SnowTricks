@@ -19,7 +19,7 @@ class CommentaireType extends AbstractType
             ->add('content', TextareaType::class, [
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Votre commentaire'
+                    'label' => 'Votre commentaire'
                 ]
             ])
             ->add('figure', EntityType::class, [

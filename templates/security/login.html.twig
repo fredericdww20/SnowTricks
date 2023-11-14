@@ -28,17 +28,23 @@
                     <label for="inputPassword" class="mt-2 text-white">Mot de passe</label>
                     <input type="password" name="password" id="inputPassword" class="mb-3 form-control"
                            autocomplete="current-password" required>
+
+                    <div class="text-center">
+                        <button class=" mt-5 btn btn-lg btn-custom" type="submit">
+                            Connexion
+                        </button>
+                    </div>
+                    <div class="text-center mt-4">
                     <a href="{{ path('app_forgot_password_request') }}"
                        class="mt-5 text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Mot de
-                        passe oublié?</a>
+                        passe oublié?</a></br>
+                    <a href="{{ path('app_register') }}"
+                       class="mt-5 text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Crée un compte</a>
+                    </div>
                     <input type="hidden" name="_csrf_token"
                            value="{{ csrf_token('authenticate') }}"
                     >
-                    <div class="text-center">
-                    <button class=" mt-5 btn btn-lg btn-custom" type="submit">
-                        Connexion
-                    </button>
-                    </div>
+
                 </form>
 
             </div>
