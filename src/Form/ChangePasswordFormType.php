@@ -35,12 +35,12 @@ class ChangePasswordFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => 'Saisir votre nouveaux mot de passe',
+                    'label' => 'Saisir votre nouveaux mot de passe' ,
                 ],
                 'second_options' => [
-                    'label' => 'Saisir de nouveaux le mot de passe',
+                    'label' => 'Saisir de nouveaux le mot de passe' ,
                 ],
-                'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
+                'invalid_message' => 'Les champs du mot de passe doivent correspondre.' ,
                 // Instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,

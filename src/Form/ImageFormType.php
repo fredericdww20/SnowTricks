@@ -31,7 +31,7 @@ class ImageFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control mt-2',
                 ]
-                
+
             ]);
 
         $transformer = new StringToFileTransformer($this->imageDirectory);
