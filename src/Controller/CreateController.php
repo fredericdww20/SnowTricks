@@ -26,7 +26,7 @@ class CreateController extends AbstractController
     }
 
     #[Route('/add/figure', name: 'app_add_figure')]
-    public function index(TrickManager $manager, Request $request,AuthorizationCheckerInterface $authorizationChecker): Response
+    public function index(TrickManager $manager, Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $figure = new Figure();
@@ -46,7 +46,8 @@ class CreateController extends AbstractController
     }
 
     #[Route('/figure/{id}', name: 'figure_show', methods: ['GET', 'POST'])]
-    public function show(Figure $figure, Request $request, TrickManager $manager): Response {
+    public function show(Figure $figure, Request $request, TrickManager $manager): Response
+    {
         $commentaire = new Commentaire();
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
