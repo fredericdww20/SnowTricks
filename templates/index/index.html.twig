@@ -62,7 +62,7 @@
                 <div class="row mt-4" id="figures-section">
                 {% if figures|length > 0 %}
                   {% for figure in figures %}
-                    <div class="col-lg-3 col-sm-6 figure-item" data-category="{{ figure.categories.name }}">
+                    <div class="col-lg-3 col-sm-6 col-md-12 figure-item" data-category="{{ figure.categories.name }}">
                     <div class="item">
                         <div class="figure-images">
                           {% set first_image = figure.image|first %}

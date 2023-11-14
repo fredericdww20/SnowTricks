@@ -21,7 +21,7 @@
                     <div class="game-details">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="content">
+                                <div class="content container">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             {{ form_start(form) }}
@@ -40,40 +40,51 @@
                                                 'label': 'Catégories'
                                             }) }}
 
-                                            <ul id="image-fields-list"
+                                            <div id="image-fields-list"
                                                 data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
                                                 {% for imageField in form.image %}
-                                                    <li>
-                                                        {% if imageField.vars.data and imageField.vars.data.filename %}
-                                                            <img src="{{ asset('uploads/images/' ~ imageField.vars.data.filename) }}"
-                                                                 alt="{{ imageField.vars.data.filename }}">
-                                                            <p>Nom du fichier : {{ imageField.vars.data.filename }}</p>
-                                                        {% endif %}
-                                                        {{ form_row(imageField.filename) }}
+                                                    <div class="container mt-3">
                                                         <button class="delete-image" data-figure-id="{{ figure.id }}"
                                                                 data-image-id="{{ imageField.vars.data.id }}">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
-                                                    </li>
+                                                        {% if imageField.vars.data and imageField.vars.data.filename %}
+                                                            <img src="{{ asset('uploads/images/' ~ imageField.vars.data.filename) }}"
+                                                                 alt="{{ imageField.vars.data.filename }}">
+                                                            <p style="display: none">Nom du fichier : {{ imageField.vars.data.filename }}</p>
+                                                        {% endif %}
+                                                        <div class="ms-0 mb-3 col-4 text-white">
+                                                            {{ form_label(imageField.filename, 'Modifier le  fichier', {'label_attr': {'class': 'form-label text-white mt-3', 'for': 'formFile'}}) }}
+                                                            {{ form_widget(imageField.filename, {'id': 'formFile', 'attr': {'class': 'form-control'}}) }}
+                                                            {{ form_errors(imageField.filename) }}
+                                                        </div>
+
+                                                    </div>
                                                 {% endfor %}
-                                            </ul>
-                                            <ul id="video-fields-list"
+                                            </div>
+                                            <div id="video-fields-list"
                                                 data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
                                                 {% for videoField in form.videos %}
-                                                    <li>
-                                                        {{ form_row(videoField.videoLink) }}
-                                                        <button type="button" class="delete-video mt-2"
+                                                    <div class="container">
+                                                        <div class="mb-3 ms-3">
+                                                            {{ form_label(videoField.videoLink, 'Lien de la vidéo', {'label_attr': {'class': 'form-label'}}) }}
+                                                            {{ form_widget(videoField.videoLink, {'attr': {'class': 'form-control'}}) }}
+                                                            {{ form_errors(videoField.videoLink) }}
+                                                        </div>
+                                                        <button type="button" class="ms-3 btn btn-light deletevideo "
                                                                 data-video-id="{{ videoField.vars.data.id }}">Supprimer
                                                         </button>
-                                                    </li>
+                                                    </div>
                                                 {% endfor %}
-                                            </ul>
-                                            <button type="button" id="add-video">Ajouter une vidéo</button>
-                                            <button type="button" id="add-image">Ajouter une image</button>
+                                            </div>
+                                            <div class="ms-3 mt-5">
+                                            <button class="btn btn-light mt-1 " type="button" id="add-video">Ajouter une vidéo</button>
+                                            <button class="btn btn-light mt-1" type="button" id="add-image">Ajouter une image</button>
+                                            </div>
                                         </div>
                                         <button type="submit" class="mt-3  btn-custom">Enregistrer</button>
                                         {{ form_end(form) }}
-                                        <a class="mt-2" href="{{ path('figure_show', {'id': figure.id}) }}">Retour à la figure</a>
+                                        <a class="returnbnt mt-2" href="{{ path('figure_show', {'id': figure.id}) }}">Retour à la figure</a>
                                     </div>
                                 </div>
                             </div>

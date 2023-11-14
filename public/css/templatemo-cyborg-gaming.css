@@ -132,6 +132,7 @@ body .page-content {
   background-color: #27292a;
   padding: 60px;
   border-radius: 23px;
+  margin-top: 70px;
 }
 
 p {
@@ -1618,7 +1619,7 @@ body {
 
 @media (max-width: 767px) {
   body .page-content {
-    padding-top: 45px;
+    padding-top: 0px;
     padding-bottom: 45px;
   }
   .main-banner {
@@ -1734,7 +1735,6 @@ body {
   display: inline-block;
   border-radius: 25px;
   font-weight: 400;
-  text-transform: capitalize;
   letter-spacing: 0.5px;
   transition: all .3s;
   position: relative;
@@ -1749,7 +1749,6 @@ body {
   display: inline-block;
   border-radius: 25px;
   font-weight: 400;
-  text-transform: capitalize;
   letter-spacing: 0.5px;
   transition: all .3s;
   position: relative;

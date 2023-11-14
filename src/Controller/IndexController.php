@@ -27,7 +27,7 @@ class IndexController extends AbstractController
     public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
-        $limit = 4;
+        $limit = 10;
         $totalFigures = $this->entityManager->getRepository(Figure::class)->count([]);
         $totalPages = ceil($totalFigures / $limit);
 

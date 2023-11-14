@@ -181,6 +181,38 @@
     margin-top: 200px;
 }
 
+.delete-image {
+    position: absolute;
+    margin: 10px;
+    background-color: rgb(236, 96, 144);
+    padding: 3px 8px 2px;
+    color: white;
+}
+
+.form-error {
+    color: red;
+}
+
+#video-fields-list {
+    color: white;
+}
+
+label {
+    display: inline-block;
+    color: white !important;
+}
+
+.commentcontent {
+    margin-top: 150px;
+}
+
+.customreset {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    height: 100vh; /* Hauteur totale de la fenêtre */
+    text-align: center;
+}
 
 
 

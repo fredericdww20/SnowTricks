@@ -52,41 +52,44 @@
 {#    </div>#}
 {#    </div>#}
 
-    <div class="container">
-        <div class="row">
-            <img src="{{ asset('images/logo_add_figure.png') }}" class="img-fluid">
-        </div>
-    </div>
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <img src="{{ asset('images/logo_add_figure.png') }}" class="img-fluid">#}
+{#        </div>#}
+{#    </div>#}
 
     <div class="container customcontainerfigure">
         <div class="row">
             <div class="form-signin">
-                <!-- Ici commence le formulaire Symfony -->
+
                 {{ form_start(form, {'attr': {'class': 'g-3'}}) }}
 
-                <h1 class="h3 mb-3 fw-normal text-center">Veuillez remplir le formulaire</h1>
+                <h1 class="h3 mb-3 fw-normal text-center text-white">Veuillez remplir le formulaire</h1>
 
-                {{ form_row(form.name, {'attr': {'class': 'form-control mb-2', 'placeholder': 'Nom'}}) }}
-                {{ form_row(form.description, {'attr': {'class': 'form-control mb-2', 'placeholder': 'Description'}}) }}
-                {{ form_row(form.categories, {'attr': {'class': 'form-control mb-2', 'placeholder': 'Catégories'}}) }}
+                <p>{{ form_label(form.name) }}</p>
+                {{ form_widget(form.name, {'attr': {'class': 'form-control mb-2', 'placeholder': 'Nom'}}) }}
+                <div class="form-error">{{ form_errors(form.name, {'attr': {'class': 'text-white'}}) }}</div>
+                <p>{{ form_label(form.description) }}</p>
+                {{ form_widget(form.description, {'attr': {'class': 'form-control mb-2', 'placeholder': 'Description'}}) }}
+                <p>{{ form_label(form.categories) }}</p>
+                {{ form_widget(form.categories, {'attr': {'class': 'form-control mb-2', 'placeholder': 'Catégories'}}) }}
 
-                <div class="image" data-index="{{ form.image|length > 0 ? form.image|last.vars.name + 1 : 0 }}"
-                     data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}"
-                     class="mb-2">
-
+                <div class="text-white image mb-2"
+                     data-index="{{ form.image|length > 0 ? form.image|last.vars.name + 1 : 0 }}"
+                     data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
                 </div>
 
-                <button type="button" class="btn btn-outline-secondary mb-2 add_item_link" data-collection-holder-class="image">Ajouter une image</button>
-
-                <div class="tags" data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}"
+                <div class="tags text-white" data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}"
                      data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"
                      class="mb-2 ">
                 </div>
 
-                <button type="button" class="btn btn-outline-secondary mb-2 add_item_link" data-collection-holder-class="tags">Ajouter une vidéo
+                <button type="button" class="btn btn-light mb-2 add_item_link mt-3 mb-3" data-collection-holder-class="tags">Ajouter une vidéo
                 </button>
+                <button type="button" class="btn btn-light mb-2 add_item_link mt-3 mb-3" data-collection-holder-class="image">Ajouter une image</button>
 
-                <input class="w-100 btn btn-lg btn-primary" type="submit" value="Soumettre"/>
+
+                <input class="w-100 btn-custom" type="submit" value="Soumettre"/>
 
                 {{ form_end(form) }}
                 <!-- Ici se termine le formulaire Symfony -->

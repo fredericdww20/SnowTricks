@@ -20,7 +20,7 @@ use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-#[Route('/reset-password')]
+#[Route('/mot-de-passe-oublie')]
 class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
@@ -120,8 +120,8 @@ class ResetPasswordController extends AbstractController
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
-
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('success', 'Votre mot de passe a bien été modifié.');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('reset_password/reset.html.twig', [
@@ -159,7 +159,7 @@ class ResetPasswordController extends AbstractController
         $email = (new TemplatedEmail())
             ->from(new Address('contact@snowtricks.fportemer.fr', 'Modification du mot de passe'))
             ->to($user->getEmail())
-            ->subject('Your password reset request')
+            ->subject('Votre demande de réinitialisation de mot de passe')
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,

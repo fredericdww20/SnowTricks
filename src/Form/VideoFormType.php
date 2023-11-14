@@ -20,7 +20,11 @@ class VideoFormType extends AbstractType
         $builder
             ->add('videoLink', TextType::class, [
                 'label' => 'Lien de la vidéo',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'input-group-text mt-2 ',
+                ]
+
             ]);
     }
 

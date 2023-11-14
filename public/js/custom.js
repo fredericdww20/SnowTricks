@@ -1,3 +1,22 @@
+$(document).ready(function(){
+	$('.filter-btn').click(function(){
+		var category = $(this).data('category');
+		if(category === 'all') {
+			$('.figure-item').show();
+			$('#no-figures-message').hide(); // Cache le message si le filtre est réinitialisé
+		} else {
+			$('.figure-item').hide();
+			var filteredItems = $('.figure-item[data-category="' + category + '"]');
+			if(filteredItems.length > 0) {
+				filteredItems.show();
+				$('#no-figures-message').hide(); // Cache le message s'il y a des éléments à afficher
+			} else {
+				$('#no-figures-message').show(); // Affiche le message s'il n'y a pas d'éléments à afficher
+			}
+		}
+	});
+});
+
 
 
 (function ($) {
