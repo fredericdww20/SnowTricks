@@ -36,7 +36,7 @@ class CreateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->create($form->get('image'), $figure);
-            $this->addFlash('success', 'Votre figure avec ses vidéos a bien été ajoutée !');
+            $this->addFlash('success', 'Votre figure a bien été ajoutée !');
             return $this->redirectToRoute('app_index');
         }
 
@@ -45,16 +45,24 @@ class CreateController extends AbstractController
         ]);
     }
 
-    #[Route('/figure/{id}', name: 'figure_show', methods: ['GET', 'POST'])]
-    public function show(Figure $figure, Request $request, TrickManager $manager): Response
+    #[Route('/figure/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
+    public function show(string $slug, Request $request, TrickManager $manager): Response
     {
+
+        $figure = $this->entityManager->getRepository(Figure::class)->findOneBy(['slug' => $slug]);
+
+        if (!$figure) {
+            throw $this->createNotFoundException('La figure demandée n\'a pas été trouvée.');
+        }
+
         $commentaire = new Commentaire();
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->addComment($form, $figure);
-            return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
+            // Rediriger en utilisant le slug
+            return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
         }
 
         return $this->render('figure/show.html.twig', [
@@ -71,13 +79,28 @@ class CreateController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
-        // Suppression de la figure sans vérifier le CSRF token
         $entityManager->remove($figure);
         $entityManager->flush();
 
         $this->addFlash('success', 'Figure supprimée avec succès !');
 
         return $this->redirectToRoute('app_index');
+    }
+
+    #[Route('/figure/{id}/deletecomment', name: 'figure_delete_comment', methods: ['GET', 'POST'])]
+    public function deletecomment(Commentaire $commentaire, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker): Response
+    {
+        if (!$authorizationChecker->isGranted('COMMENT_DELETE', $commentaire)) {
+            $this->addFlash('error', 'Vous ne pouvez pas supprimer cette figure.');
+            return $this->redirectToRoute('app_index');
+        }
+
+        $entityManager->remove($commentaire);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Commentaire supprimé avec succès !');
+
+        return $this->redirectToRoute('figure_show', ['slug' => $commentaire->getFigure()->getSlug()]);
     }
 
     #[Route('/figure/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
@@ -95,7 +118,7 @@ class CreateController extends AbstractController
 
             $manager->update($form->get('image'), $figure);
             $this->addFlash('success', 'Votre figure a bien été modifiée !');
-            return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
+            return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
         }
 
         return $this->render('figure/edit.html.twig', [
@@ -103,32 +126,6 @@ class CreateController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-//    #[Route('/figure/{figureId}/edit/image/{imageId}/delete', name: 'delete_image', methods: ['POST'])]
-//    public function deleteImage($figureId, $imageId, EntityManagerInterface $entityManager): JsonResponse {
-//        $image = $entityManager->getRepository(Image::class)->find($imageId);
-//
-//        if (!$image) {
-//            return new JsonResponse(['status' => 'error', 'message' => 'Image non trouvée']);
-//        }
-//
-//        try {
-//            // Supprimez physiquement le fichier image
-//            $fileSystem = new Filesystem();
-//            $fileToBeDeleted = $this->getParameter('images_directory').'/'.$image->getFilename();
-//            if ($fileSystem->exists($fileToBeDeleted)) {
-//                $fileSystem->remove($fileToBeDeleted);
-//            }
-//
-//            $entityManager->remove($image);
-//            $entityManager->flush();
-//
-//            return new JsonResponse(['status' => 'success', 'message' => 'Image supprimée avec succès']);
-//        }
-//        catch (\Exception $e) {
-//            return new JsonResponse(['status' => 'error', 'message' => 'Erreur lors de la suppression de l\'image: '.$e->getMessage()]);
-//        }
-//    }
 
     #[Route('/figure/{id}/editcomment', name: 'figure_edit_comment', methods: ['GET', 'POST'])]
     public function editcomment(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
@@ -140,12 +137,16 @@ class CreateController extends AbstractController
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
-            return $this->redirectToRoute('figure_show', ['id' => $commentaire->getFigure()->getId()]);
+            return $this->redirectToRoute('figure_show', ['slug' => $commentaire->getFigure()->getSlug()]);
         }
-
+        // Message d'alerte
         return $this->render('commentaire/edit.html.twig', [
             'commentaire' => $commentaire,
             'form' => $form->createView(),
         ]);
+    }
+
+    private function getRepository(string $class)
+    {
     }
 }

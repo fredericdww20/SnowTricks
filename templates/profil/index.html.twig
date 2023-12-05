@@ -1,20 +1,109 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfilController!{% endblock %}
+{% block title %}Profil{% endblock %}
 
 {% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="mt-5">
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .example-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+    }
+
+    .example-wrapper code {
+        background: #F5F5F5;
+        padding: 2px 6px;
+    }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="main-profile ">
+                            {% for label, messages in app.flashes %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show"
+                                         role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            <div class="row mb-3">
+                                <div class="col-lg-4">
+                                    <img src="assets/images/profile.jpg" alt="" style="border-radius: 23px;">
+                                    {% if user.profilePicture %}
+                                        <div class="profile-picture">
+                                            <img src="{{ asset('images/profile_pictures/' ~ user.profilePicture) }}"
+                                                 alt="Photo de profil">
+                                        </div>
+                                    {% else %}
+                                        <div class="profile-picture">
+                                            <img src="{{ asset('images/profile_pictures/placeholder.png') }}"
+                                                 alt="Photo de profil">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-lg-4 align-self-center">
+                                    <div class="main-info header-text">
+                                        <span>Connecter</span>
+                                        <h4>{{ user.username }}</h4>
+                                        <p>{{ user.email }}</p>
+                                        <div class="main-border-button">
+                                            <a href="{{ path('profil_edit') }}">Éditer le profil</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 align-self-center">
+                                    <ul>
+                                        <li>Figure publiée <span>{{ figuresCount }}</span></li>
+                                        <li>Commentaire <span>{{ commentsCount }}</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/MAMP/htdocs/SnowTricks/src/Controller/ProfilController.php'|file_link(0) }}">src/Controller/ProfilController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/MAMP/htdocs/SnowTricks/templates/profil/index.html.twig'|file_link(0) }}">templates/profil/index.html.twig</a></code></li>
-    </ul>
-</div>
-{% endblock %}
+                        <div class="gaming-library profile-library">
+                            <div class="col-lg-12">
+                                <div class="heading-section">
+                                    <h4><em>Vos figures</em> publiées</h4>
+                                </div>
+                                {% for figure in figures %}
+                                <div class="item">
+                                    <ul>
+                                    {% if figure.image|length > 0 %}
+                                        {% set image = figure.image|first %}
+                                        <li><img class="templatemo-item" src="{{ asset('uploads/images/' ~ image.filename) }}" alt="{{ image.filename }}"></li>
+                                        {% else %}
+                                            <li><img src="{{ asset('images/placeholder.png') }}" alt="Image par défaut" class="templatemo-item"></li>
+                                    {% endif %}
+                                        <li><h4>{{ figure.name }}</h4><span>{{ figure.categories }}</span></li>
+                                        <li><h4>Crée le</h4><span>{{ figure.createdAt|date("m/d/Y") }}</span></li>
+                                        <li><h4>Modifié le</h4><span>{{ figure.updatedAt|date("m/d/Y") }}</span></li>
+                                        <li><div class="main-border-button border-no-active"><a href="{{ path('figure_delete', {'id': figure.id}) }}">Supprimer</a></div></li>
+                                        <li><div class="main-border-button border-no-active"><a href="{{ path('figure_edit', {'id': figure.id}) }}">Modifier</a></div></li>
+                                    </ul>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

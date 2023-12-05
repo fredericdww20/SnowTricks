@@ -17,7 +17,7 @@
                 {{ form_end(form) }}
             </form>
 
-            <a href="{{ path('figure_show', {'id': commentaire.getFigure().id}) }}" class="mt-3">Retour à la figure</a>
+            <a href="{{ path('figure_show', {'slug': commentaire.getFigure().slug}) }}" class="mt-3">Retour à la figure</a>
         </div>
     </div>
 {% endblock %}

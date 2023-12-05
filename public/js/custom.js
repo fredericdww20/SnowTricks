@@ -1,3 +1,77 @@
+document.addEventListener('DOMContentLoaded', function () {
+	const imageFieldsList = document.getElementById('image-fields-list');
+	const addImageButton = document.getElementById('add-image');
+
+	// Ajouter un champ d'image
+	addImageButton.addEventListener('click', function () {
+		const prototype = imageFieldsList.dataset.prototype;
+		const index = imageFieldsList.children.length;
+		const newForm = prototype.replace(/__name__/g, index);
+		imageFieldsList.insertAdjacentHTML('beforeend', newForm);
+	});
+
+	// Supprimer un champ d'image
+	document.addEventListener('click', function (e) {
+		if (e.target.classList.contains('delete-image')) {
+			const imageField = e.target.closest('.container');
+			imageField.remove();
+		}
+	});
+});
+// Add + delete video
+document.addEventListener('DOMContentLoaded', function () {
+
+	const videoFieldsList = document.getElementById('video-fields-list');
+	const addVideoButton = document.getElementById('add-video');
+	const newVideoIndex = videoFieldsList.children.length;
+
+	addVideoButton.addEventListener('click', function () {
+		const prototype = videoFieldsList.dataset.prototype;
+		const newForm = prototype.replace(/__name__/g, newVideoIndex);
+		videoFieldsList.insertAdjacentHTML('beforeend', newForm);
+		videoFieldsList.children[newVideoIndex].querySelector('.delete-video').addEventListener('click', function () {
+			this.closest('li').remove();
+		});
+	});
+
+	document.querySelectorAll('.delete-video').forEach(button => {
+		button.addEventListener('click', function () {
+			this.closest('div').remove();
+		});
+	});
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+	const profilePicture = document.getElementById('profilePicture');
+	const deleteProfilePictureButton = document.getElementById('deleteProfilePicture');
+
+	// Delete Profile Picture
+	deleteProfilePictureButton.addEventListener('click', function () {
+		if (confirm('Are you sure you want to delete your profile picture?')) {
+			// Send an AJAX request to delete the profile picture
+			// You can use fetch or another AJAX method to send the request
+			fetch(delete_profile_picture, {
+				method: 'POST', // Use the appropriate HTTP method
+			})
+		.then(response => {
+				if (response.ok) {
+					// Profile picture deleted successfully
+					profilePicture.style.display = 'none'; // Hide the profile picture
+					alert('Profile picture deleted successfully.');
+				} else {
+					// Handle errors here
+					alert('An error occurred while deleting the profile picture.');
+				}
+			})
+				.catch(error => {
+					// Handle network or other errors
+					console.error(error);
+				});
+		}
+	});
+});
+
+
 $(document).ready(function(){
 	$('.filter-btn').click(function(){
 		var category = $(this).data('category');
@@ -252,8 +326,6 @@ $(document).ready(function(){
 			}, 300);
 		});
 	});
-
-
 
 	const dropdownOpener = $('.main-nav ul.nav .has-sub > a');
 
