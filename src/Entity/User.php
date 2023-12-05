@@ -43,6 +43,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Commentaire::class)]
     private Collection $commentaires;
 
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private mixed $validationToken;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $profilePicture;
+
+    /**
+     * @return mixed
+     */
+    public function getValidationToken(): mixed
+    {
+        return $this->validationToken;
+    }
+
+    /**
+     * @param mixed $validationToken
+     */
+    public function setValidationToken(mixed $validationToken): void
+    {
+        $this->validationToken = $validationToken;
+    }
+
     public function __construct()
     {
         $this->figures = new ArrayCollection();
@@ -201,5 +223,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProfilePicture()
+    {
+        return $this->profilePicture;
+    }
+
+    /**
+     * @param mixed $profilePicture
+     */
+    public function setProfilePicture($profilePicture): void
+    {
+        $this->profilePicture = $profilePicture;
     }
 }

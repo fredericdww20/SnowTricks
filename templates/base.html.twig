@@ -23,7 +23,6 @@
             <div class="row">
                 <div class="col-12">
                     <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
                         <a href="{{ path('app_index') }}" class="logo">
 {#                            <img src="./images/logo.png" alt="">#}
                             <h1>SnowTricks</h1>
@@ -33,11 +32,14 @@
                             {% if app.user %}
                                 <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
                                 <li><a href="{{ path('app_add_figure') }}">Ajouter une figure</a></li>
-                                <li><a href="{{ path('app_profil') }}">Profil <img src="{{ asset('images/profile-header.jpg') }}" alt=""></a></li>
+                                {% if app.user.profilePicture %}
+                                    <li><a href="{{ path('app_profil') }}">Profil <img src="{{ asset('images/profile_pictures/' ~ app.user.profilePicture) }}" alt=""></a></li>
+                                {% else %}
+                                    <li><a href="{{ path('app_profil') }}">Profil <img src="{{ asset('images/profile_pictures/placeholder.png') }}" alt=""></a></li>
+                                {% endif %}
                             {% else %}
                                 <li><a href="{{ path('app_login') }}">Connexion</a></li>
                                 <li><a href="{{ path('app_register') }}">Inscription</a></li>
-
                             {% endif %}
                         </ul>
                         <a class='menu-trigger'>

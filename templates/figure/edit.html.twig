@@ -25,7 +25,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             {{ form_start(form) }}
-                                            <p>{{ form_label(form.name)}}</p>
+                                            <p>{{ form_label(form.name) }}</p>
                                             {{ form_widget(form.name, {
                                                 'attr': {'class': 'form-control'},
                                             }) }}
@@ -41,7 +41,7 @@
                                             }) }}
 
                                             <div id="image-fields-list"
-                                                data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
+                                                 data-prototype="{{ form_widget(form.image.vars.prototype)|e('html_attr') }}">
                                                 {% for imageField in form.image %}
                                                     <div class="container mt-3">
                                                         <button class="delete-image" data-figure-id="{{ figure.id }}"
@@ -51,7 +51,8 @@
                                                         {% if imageField.vars.data and imageField.vars.data.filename %}
                                                             <img src="{{ asset('uploads/images/' ~ imageField.vars.data.filename) }}"
                                                                  alt="{{ imageField.vars.data.filename }}">
-                                                            <p style="display: none">Nom du fichier : {{ imageField.vars.data.filename }}</p>
+                                                            <p style="display: none">Nom du fichier
+                                                                : {{ imageField.vars.data.filename }}</p>
                                                         {% endif %}
                                                         <div class="ms-0 mb-3 col-4 text-white">
                                                             {{ form_label(imageField.filename, 'Modifier le  fichier', {'label_attr': {'class': 'form-label text-white mt-3', 'for': 'formFile'}}) }}
@@ -63,7 +64,7 @@
                                                 {% endfor %}
                                             </div>
                                             <div id="video-fields-list"
-                                                data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                                 data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
                                                 {% for videoField in form.videos %}
                                                     <div class="container">
                                                         <div class="mb-3 ms-3">
@@ -71,20 +72,26 @@
                                                             {{ form_widget(videoField.videoLink, {'attr': {'class': 'form-control'}}) }}
                                                             {{ form_errors(videoField.videoLink) }}
                                                         </div>
-                                                        <button type="button" class="ms-3 btn btn-light deletevideo "
+                                                        <button type="button" class="ms-3 btn btn-light delete-video "
                                                                 data-video-id="{{ videoField.vars.data.id }}">Supprimer
                                                         </button>
                                                     </div>
                                                 {% endfor %}
                                             </div>
                                             <div class="ms-3 mt-5">
-                                            <button class="btn btn-light mt-1 " type="button" id="add-video">Ajouter une vidéo</button>
-                                            <button class="btn btn-light mt-1" type="button" id="add-image">Ajouter une image</button>
+                                                <button class="btn btn-light mt-1 " type="button" id="add-video">Ajouter
+                                                    une vidéo
+                                                </button>
+                                                <button class="btn btn-light mt-1" type="button" id="add-image">Ajouter
+                                                    une image
+                                                </button>
                                             </div>
                                         </div>
                                         <button type="submit" class="mt-3  btn-custom">Enregistrer</button>
                                         {{ form_end(form) }}
-                                        <a class="returnbnt mt-2" href="{{ path('figure_show', {'id': figure.id}) }}">Retour à la figure</a>
+                                        <a class="returnbnt mt-2"
+                                           href="{{ path('figure_show', {'slug': figure.slug}) }}">Retour à la
+                                            figure</a>
                                     </div>
                                 </div>
                             </div>
@@ -95,50 +102,5 @@
         </div>
     </div>
 
-    <script>
-        // Add + delete image
-        document.addEventListener('DOMContentLoaded', function () {
-            const imageFieldsList = document.getElementById('image-fields-list');
-            const addImageButton = document.getElementById('add-image');
-            const deleteImageButtons = document.querySelectorAll('.delete-image');
-
-            addImageButton.addEventListener('click', function () {
-                const prototype = imageFieldsList.dataset.prototype;
-                const index = imageFieldsList.children.length;
-                const newForm = prototype.replace(/__name__/g, index);
-
-                imageFieldsList.insertAdjacentHTML('beforeend', newForm);
-            });
-
-            deleteImageButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const imageField = button.closest('li');
-                    imageField.remove();
-                });
-            });
-        });
-        // Add + delete video
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const videoFieldsList = document.getElementById('video-fields-list');
-            const addVideoButton = document.getElementById('add-video');
-            const newVideoIndex = videoFieldsList.children.length;
-
-            addVideoButton.addEventListener('click', function () {
-                const prototype = videoFieldsList.dataset.prototype;
-                const newForm = prototype.replace(/__name__/g, newVideoIndex);
-                videoFieldsList.insertAdjacentHTML('beforeend', newForm);
-                videoFieldsList.children[newVideoIndex].querySelector('.delete-video').addEventListener('click', function () {
-                    this.closest('li').remove();
-                });
-            });
-
-            document.querySelectorAll('.delete-video').forEach(button => {
-                button.addEventListener('click', function () {
-                    this.closest('li').remove();
-                });
-            });
-        });
-    </script>
 
 {% endblock %}

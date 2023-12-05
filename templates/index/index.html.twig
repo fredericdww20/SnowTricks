@@ -72,7 +72,7 @@
                             <img src="{{ asset('images/placeholder.png') }}" alt="Image par défaut">
                           {% endif %}
                         </div>
-                        <a href="{{ path('figure_show', {'id': figure.id}) }}"><h4>{{ figure.name }}<br><span></span></h4></a></br>
+                        <a href="{{ path('figure_show', {'slug': figure.slug}) }}"><h4>{{ figure.name }}<br><span></span></h4></a></br>
                         <p>{{ figure.categories }}</p>
                         <ul>
                             {% if is_granted('FIGURE_EDIT', figure) %}
@@ -84,7 +84,7 @@
                                             class="fas fa-trash-alt"></i></a>
                             {% endif %}
                         </ul>
-                        <a href="{{ path('figure_show', {'id': figure.id}) }}">Voir</a>
+                        <a href="{{ path('figure_show', {'slug': figure.slug}) }}">Voir</a>
                       </div>
                     </div>
                   {% endfor %}

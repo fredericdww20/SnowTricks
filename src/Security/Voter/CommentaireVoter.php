@@ -27,6 +27,7 @@ class CommentaireVoter extends Voter
 
         switch ($attribute) {
             case self::COMMENT_EDIT:
+                return $subject->getAuthor() === $user;
             case self::COMMENT_DELETE:
                 return $subject->getAuthor() === $user;
                 break;

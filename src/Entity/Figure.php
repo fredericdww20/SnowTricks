@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: FigureRepository::class)]
@@ -17,6 +18,10 @@ class Figure
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[Gedmo\Slug(fields: ['name'])]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    private $slug;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -224,4 +229,21 @@ class Figure
         }
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug): void
+    {
+        $this->slug = $slug;
+    }
+
 }

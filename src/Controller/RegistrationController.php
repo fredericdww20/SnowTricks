@@ -18,6 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+
 
 class RegistrationController extends AbstractController
 {
@@ -29,14 +31,14 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            // Encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -44,24 +46,25 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            // Générer le token de validation
+            $token = bin2hex(random_bytes(32));
+            $user->setValidationToken($token);
+
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('contact@snowtricks.fportemer.fr', 'Confirmation de votre compte'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+            // Envoi de l'email de confirmation avec le token de validation
+            $email = (new TemplatedEmail())
+                ->from(new Address('contact@snowtricks.fportemer.fr', 'Confirmation de votre compte'))
+                ->to($user->getEmail())
+                ->subject('Merci de confirmer votre compte !')
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+                ->context(['validation_token' => $token]);
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            $mailer->send($email);
+
+            // Redirection vers l'accueil sans connexion
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -69,33 +72,72 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
-    {
-        $id = $request->query->get('id');
 
-        if (null === $id) {
+//    #[Route('/register', name: 'app_register')]
+//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+//    {
+//        $user = new User();
+//        $form = $this->createForm(RegistrationFormType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            // encode the plain password
+//            $user->setPassword(
+//                $userPasswordHasher->hashPassword(
+//                    $user,
+//                    $form->get('plainPassword')->getData()
+//                )
+//            );
+//
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//
+//            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+//                (new TemplatedEmail())
+//                    ->from(new Address('contact@snowtricks.fportemer.fr', 'Confirmation de votre compte'))
+//                    ->to($user->getEmail())
+//                    ->subject('Merci de confirmer votre compte !')
+//                    ->htmlTemplate('registration/confirmation_email.html.twig')
+//            );
+//            // do anything else you need here, like send an email
+//
+//            return $userAuthenticator->authenticateUser(
+//                $user,
+//                $authenticator,
+//                $request
+//            );
+//        }
+//
+//        return $this->render('registration/register.html.twig', [
+//            'registrationForm' => $form->createView(),
+//        ]);
+//    }
+
+    #[Route('/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $token = $request->query->get('token');
+
+        if (null === $token) {
             return $this->redirectToRoute('app_register');
         }
 
-        $user = $userRepository->find($id);
+        $user = $userRepository->findOneBy(['validationToken' => $token]);
 
         if (null === $user) {
+            $this->addFlash('verify_email_error', 'Le lien de vérification est pas valide ou a expiré . ');
             return $this->redirectToRoute('app_register');
         }
 
-        // validate email confirmation link, sets User::isVerified=true and persists
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
-            return $this->redirectToRoute('app_register');
-        }
+        $user->setIsVerified(true);
+        $user->setValidationToken(null);
+        $entityManager->persist($user);
+        $entityManager->flush();
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Votre email a bien été vérifié . ');
 
         return $this->redirectToRoute('app_login');
     }
+
 }

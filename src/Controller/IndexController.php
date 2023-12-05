@@ -34,14 +34,13 @@ class IndexController extends AbstractController
         $figures = $this->entityManager->getRepository(Figure::class)
             ->findBy([], null, $limit, ($page - 1) * $limit);
 
-        // Récupérez les catégories ici
         $categories = $this->entityManager->getRepository(Categories::class)->findAll();
 
         return $this->render('index/index.html.twig', [
             'figures' => $figures,
             'totalPages' => $totalPages,
             'currentPage' => $page,
-            'categories' => $categories, // Ajoutez les catégories au tableau de paramètres
+            'categories' => $categories,
         ]);
     }
 
