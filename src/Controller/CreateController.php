@@ -115,7 +115,6 @@ class CreateController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $manager->update($form->get('image'), $figure);
             $this->addFlash('success', 'Votre figure a bien été modifiée !');
             return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
