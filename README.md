@@ -32,7 +32,7 @@ Votre mission est de créer un site communautaire pour apprendre les figures de 
 
 ## Prérequis
 
-- PHP >= 7.4
+- PHP 8.1 ou supérieur
 - Composer
 - Symfony CLI
 - Node.js avec npm ou yarn
