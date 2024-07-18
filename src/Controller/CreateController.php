@@ -28,18 +28,22 @@ class CreateController extends AbstractController
     #[Route('/add/figure', name: 'app_add_figure')]
     public function index(TrickManager $manager, Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
+        // Vérifier si l'utilisateur est connecté
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $figure = new Figure();
 
+        // Vérifier si l'utilisateur a le droit de créer une figure
         $form = $this->createForm(FigureFormType::class, $figure);
         $form->handleRequest($request);
 
+        // Vérifier si l'utilisateur a le droit de créer une figure
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->create($form->get('image'), $figure);
             $this->addFlash('success', 'Votre figure a bien été ajoutée !');
             return $this->redirectToRoute('app_index');
         }
 
+        // Afficher le formulaire
         return $this->render('add_figure/index.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -48,9 +52,10 @@ class CreateController extends AbstractController
     #[Route('/figure/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(string $slug, Request $request, TrickManager $manager): Response
     {
-
+        // Récupérer la figure
         $figure = $this->entityManager->getRepository(Figure::class)->findOneBy(['slug' => $slug]);
 
+        // Vérifier si la figure existe
         if (!$figure) {
             throw $this->createNotFoundException('La figure demandée n\'a pas été trouvée.');
         }
@@ -61,10 +66,10 @@ class CreateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->addComment($form, $figure);
-            // Rediriger en utilisant le slug
             return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
         }
 
+        // Afficher la figure
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
             'commentaireForm' => $form->createView(),
@@ -74,6 +79,7 @@ class CreateController extends AbstractController
     #[Route('/figure/{id}/delete', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Figure $figure, EntityManagerInterface $entityManager, Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
+        // Vérifier si l'utilisateur a le droit de supprimer la figure
         if (!$authorizationChecker->isGranted('FIGURE_DELETE', $figure)) {
             $this->addFlash('error', 'Vous ne pouvez pas supprimer cette figure.');
             return $this->redirectToRoute('app_index');
@@ -90,6 +96,7 @@ class CreateController extends AbstractController
     #[Route('/figure/{id}/deletecomment', name: 'figure_delete_comment', methods: ['GET', 'POST'])]
     public function deletecomment(Commentaire $commentaire, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker): Response
     {
+        // Vérifier si l'utilisateur a le droit de supprimer le commentaire
         if (!$authorizationChecker->isGranted('COMMENT_DELETE', $commentaire)) {
             $this->addFlash('error', 'Vous ne pouvez pas supprimer cette figure.');
             return $this->redirectToRoute('app_index');
@@ -106,6 +113,7 @@ class CreateController extends AbstractController
     #[Route('/figure/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
     public function edit(TrickManager $manager, Request $request, Figure $figure, AuthorizationCheckerInterface $authorizationChecker): Response
     {
+        // Vérifier si l'utilisateur a le droit de modifier la figure
         if (!$authorizationChecker->isGranted('FIGURE_EDIT', $figure)) {
             $this->addFlash('error', 'Vous ne pouvez pas modifier cette figure.');
             return $this->redirectToRoute('app_index');
@@ -129,21 +137,33 @@ class CreateController extends AbstractController
     #[Route('/figure/{id}/editcomment', name: 'figure_edit_comment', methods: ['GET', 'POST'])]
     public function editcomment(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
+        // Vérifier si le commentaire appartient à une figure
+        $figure = $commentaire->getFigure();
+        if (!$figure) {
+            throw $this->createNotFoundException('Figure not found for this comment.');
+        }
+
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $figure = $commentaire->getFigure(); // Récupérer la figure après la soumission du formulaire
+            if (!$figure) {
+                throw new \Exception('La figure n\'a pas été trouvée pour ce commentaire.');
+            }
+
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
-            return $this->redirectToRoute('figure_show', ['slug' => $commentaire->getFigure()->getSlug()]);
+            return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
         }
-        // Message d'alerte
+
         return $this->render('commentaire/edit.html.twig', [
             'commentaire' => $commentaire,
             'form' => $form->createView(),
         ]);
     }
+
 
     private function getRepository(string $class)
     {

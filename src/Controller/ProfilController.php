@@ -94,9 +94,7 @@ class ProfilController extends AbstractController
 
 
 
-private function getDoctrine()
+    private function getDoctrine()
     {
-
     }
-
 }
