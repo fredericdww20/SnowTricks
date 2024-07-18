@@ -1,4 +1,4 @@
-# Snowboard Tricks Community Site
+# SnowTricks le site communautaire 
 
 Jimmy Sweat est un entrepreneur ambitieux passionné de snowboard. Son objectif est de créer un site collaboratif pour faire connaître ce sport auprès du grand public et aider à l'apprentissage des figures (tricks).
 
