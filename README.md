@@ -43,3 +43,25 @@ Votre mission est de créer un site communautaire pour apprendre les figures de 
 3. Installer les dépendances JavaScript :
    ```bash
     npm install
+
+4. Configurer la base de données dans le fichier .env :
+   ```bash
+   DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name"
+
+5. Initialiser la base de données et charger les données initiales :
+   ```bash
+   php bin/console doctrine:database:create
+   php bin/console doctrine:schema:update --force
+   php bin/console doctrine:fixtures:load
+
+6. Lancer le serveur de développement :
+   ```bash
+   symfony serve
+
+7. Accéder à l'application dans votre navigateur :
+   ```bash
+   http://localhost:8000
+
+
+Diagrammes
+Les diagrammes UML (modèle de données, classes, séquences, use cases) sont disponibles dans le dossier diagrammes.
