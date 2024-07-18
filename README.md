@@ -35,3 +35,11 @@ Votre mission est de créer un site communautaire pour apprendre les figures de 
    ```bash
    git clone https://github.com/username/nom_du_repo.git
    cd nom_du_repo
+
+2. Installer les dépendances PHP avec Composer :
+    ```bash
+    composer install
+
+3. Installer les dépendances JavaScript :
+   ```bash
+    npm install
