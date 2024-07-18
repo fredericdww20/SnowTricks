@@ -62,6 +62,9 @@ Votre mission est de créer un site communautaire pour apprendre les figures de 
    ```bash
    http://localhost:8000
 
+- Arborescence
+
+![Arborescence](./diagrammes/SnowTricks_ARBORESCENCE.png)
 
 Diagrammes
 Les diagrammes UML (modèle de données, classes, séquences, use cases) sont disponibles dans le dossier diagrammes.
