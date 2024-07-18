@@ -63,5 +63,32 @@ Votre mission est de créer un site communautaire pour apprendre les figures de 
    http://localhost:8000
 
 
-Diagrammes
-Les diagrammes UML (modèle de données, classes, séquences, use cases) sont disponibles dans le dossier diagrammes.
+## Diagrammes-uml
+
+- Arborescence
+
+![Arborescence](./diagrammes/SnowTricks_ARBORESCENCE.png)
+
+- Diagramme de Séquence - Inscription, Connexion
+
+![Diagramme de Séquence - Inscription, Connexion](./diagrammes/SnowTricks_DS_inscription_connexion.png)
+
+- Diagramme de cas d'utilisation - Visiteur, Utilisateur
+
+![Diagramme de cas d'utilisation - Visiteur, Utilisateur](./diagrammes/SnowTricks_DCU.png)
+
+- Diagramme de Séquence commentaire - Affichage, Création, Edition, Suppression
+
+![Diagramme de Séquence commentaire - Affichage, Création, Edition, Suppression](./diagrammes/SnowTricks_DS_ajout_modifier_supprimer_commentaire.drawio.png)
+
+- Diagramme de Séquence figure - Affichage, Création, Edition, Suppression
+
+![Diagramme de Séquence figure - Affichage, Création, Edition, Suppression](./diagrammes/SnowTricks_PHP_DS_figure.png)
+
+- Diagramme de Classe
+
+![Diagramme de Classe](./diagrammes/SnowTricks_diagramme%20de%20classes.png)
+
+     
+## Licence
+Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
