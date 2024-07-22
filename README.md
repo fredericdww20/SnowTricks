@@ -19,7 +19,7 @@ Il souhaite capitaliser sur du contenu apporté par les internautes afin de dév
 
 Votre mission est de créer un site communautaire pour apprendre les figures de snowboard, en répondant aux besoins suivants :
 
-- Un annuaire des figures de snowboard (10 figures initiales)
+- Un annuaire des figures de snowboard (8 figures initiales)
 - Gestion des figures (création, modification, consultation)
 - Un espace de discussion commun pour chaque figure
 
