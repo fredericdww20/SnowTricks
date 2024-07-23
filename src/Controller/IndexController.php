@@ -26,16 +26,20 @@ class IndexController extends AbstractController
     #[Route('', name: 'app_index')]
     public function index(Request $request): Response
     {
+        // Pagination
         $page = $request->query->getInt('page', 1);
+        // Nombre de figures par page
         $limit = 10;
+        // Nombre total de figures
         $totalFigures = $this->entityManager->getRepository(Figure::class)->count([]);
+        // Nombre total de pages
         $totalPages = ceil($totalFigures / $limit);
-
+        // Obtenir tous les figures
         $figures = $this->entityManager->getRepository(Figure::class)
             ->findBy([], null, $limit, ($page - 1) * $limit);
-
+        // Obtenir toutes les catégories
         $categories = $this->entityManager->getRepository(Categories::class)->findAll();
-
+        // Rendu de la vue
         return $this->render('index/index.html.twig', [
             'figures' => $figures,
             'totalPages' => $totalPages,

@@ -22,6 +22,7 @@ class ProfilController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
+    // Affiche le profil de l'utilisateur connecté
     #[Route('/profil', name: 'app_profil')]
     public function index(EntityManagerInterface $entityManager)
     {
@@ -44,6 +45,7 @@ class ProfilController extends AbstractController
     }
 
 
+    // Permet de modifier le profil de l'utilisateur connecté
     #[Route('/profil/edit', name: 'profil_edit')]
     public function editProfile(Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager)
     {
@@ -60,18 +62,22 @@ class ProfilController extends AbstractController
             /** @var UploadedFile $file */
             $file = $form['profilePicture']->getData();
 
+            // Cette condition est nécessaire car le champ IMAGE n\'est pas obligatoire
             if ($file) {
+                // On supprime l'ancienne image
                 $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                // Ceci est nécessaire pour inclure en toute sécurité le nom du fichier dans l'URL
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
+                // Déplacez le fichier dans le répertoire où sont stockées les images de profil
                 try {
                     $file->move(
                         $this->getParameter('profile_pictures_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Handle file upload error if needed
+                    // Gérer l'erreur de téléchargement de fichier si nécessaire
                 }
 
                 $user->setProfilePicture($newFilename);
@@ -91,8 +97,6 @@ class ProfilController extends AbstractController
             'user' => $user,
         ]);
     }
-
-
 
     private function getDoctrine()
     {

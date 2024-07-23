@@ -78,6 +78,7 @@
     <script src="{{ asset('/js/popup.js') }}"></script>
     <script src="{{ asset('/js/custom.js') }}"></script>
     <script>
+        // Lorsque l'utilisateur fait défiler 20 px vers le bas à partir du haut du document, affichez le bouton
         const addFormToCollection = (e) => {
             const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
