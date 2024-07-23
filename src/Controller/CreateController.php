@@ -25,6 +25,7 @@ class CreateController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
+    // Affiche le formulaire de création de figure
     #[Route('/add/figure', name: 'app_add_figure')]
     public function index(TrickManager $manager, Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
@@ -49,6 +50,7 @@ class CreateController extends AbstractController
         ]);
     }
 
+    // Affiche une figure
     #[Route('/figure/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(string $slug, Request $request, TrickManager $manager): Response
     {
@@ -76,6 +78,7 @@ class CreateController extends AbstractController
         ]);
     }
 
+    // Supprimer une figure
     #[Route('/figure/{id}/delete', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Figure $figure, EntityManagerInterface $entityManager, Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
@@ -93,6 +96,7 @@ class CreateController extends AbstractController
         return $this->redirectToRoute('app_index');
     }
 
+    // Supprimer un commentaire
     #[Route('/figure/{id}/deletecomment', name: 'figure_delete_comment', methods: ['GET', 'POST'])]
     public function deletecomment(Commentaire $commentaire, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker): Response
     {
@@ -110,6 +114,7 @@ class CreateController extends AbstractController
         return $this->redirectToRoute('figure_show', ['slug' => $commentaire->getFigure()->getSlug()]);
     }
 
+    // Modifier une figure
     #[Route('/figure/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
     public function edit(TrickManager $manager, Request $request, Figure $figure, AuthorizationCheckerInterface $authorizationChecker): Response
     {
@@ -134,13 +139,14 @@ class CreateController extends AbstractController
         ]);
     }
 
+    // Modifier un commentaire
     #[Route('/figure/{id}/editcomment', name: 'figure_edit_comment', methods: ['GET', 'POST'])]
     public function editcomment(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
         // Vérifier si le commentaire appartient à une figure
         $figure = $commentaire->getFigure();
         if (!$figure) {
-            throw $this->createNotFoundException('Figure not found for this comment.');
+            throw $this->createNotFoundException('Chiffre non trouvé pour ce commentaire.');
         }
 
         $form = $this->createForm(CommentaireType::class, $commentaire);
