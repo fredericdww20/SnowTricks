@@ -77,7 +77,11 @@ Votre mission est de créer un site communautaire pour apprendre les figures de 
 2. Accéder à l'application dans votre navigateur :
    ```bash
    http://localhost:8000
-
+   
+3. Connexion avec un compte existant
+   ```bash
+   Email: frederic.portemer@vedayshop.fr
+   Mot de passe: passwordtest
 
 ## Contribuer
 
